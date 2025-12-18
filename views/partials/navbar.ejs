@@ -1,0 +1,48 @@
+<style>
+/* .custom-navbar {
+  background: #fff;
+  transition: box-shadow 0.2s ease, border-bottom 0.2s ease;
+}
+
+.custom-navbar.scrolled {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+} */
+
+</style>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg py-3 sticky-top custom-navbar"> <!-- shadow-sm -->
+    <div class="container-fluid"> 
+        <!-- container-lg for centering all of the content -->
+         
+        <a class="navbar-brand ms-lg-5" aria-current="page" href="/">ThoughtsBite</a>
+
+        <!-- Hamburger button -->
+        <button class="navbar-toggler border-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible menu -->
+        <div class="collapse navbar-collapse justify-content-end me-lg-5" id="navbarNav">
+            <ul class="navbar-nav gap-4 align-items-center align-items-center-lg">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/thoughts">Thoughts</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="/add">User</a></li> -->
+                <li class="nav-item"><a class="btn add rounded-pill" href="/thoughts/add" role="button">Add Thought</a></li>              
+                <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+                <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>  
+<!-- <script>
+    window.addEventListener("scroll", () => {
+    const navbar = document.querySelector(".navbar");
+
+    if (window.scrollY > 10) {
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
+    }
+});
+</script> -->

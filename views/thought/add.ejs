@@ -1,0 +1,108 @@
+<div class="container my-5" style="max-width: 720px;">
+
+    <div class="thought-outline mx-auto">
+    <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h2 class="add-title fw-bold">New Thought</h2>
+            <p class="text-muted">Capture what resonated with you today</p>
+        </div>
+
+        <form method="POST" action="/thoughts/add" class="my-3">
+
+            <!-- Key Takeaway -->
+            <div class="mb-4">
+            <label class="form-label fw-semibold">What stood out to you?</label>
+            <textarea
+                class="form-control"
+                rows="5"
+                placeholder="Write the key idea or lesson you want to remember..."
+                name="keyTakeaways"
+                required></textarea>
+            </div>
+
+            <!-- Source Title -->
+            <div class="mb-3">
+            <label class="form-label fw-semibold">Source Title</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="It’s okay not to be okay"
+                name="sourceTitle"
+                required>
+            </div>
+
+            <!-- Source Link -->
+            <div class="mb-4">
+            <label class="form-label fw-semibold">Source Link <span class="text-muted">(optional)</span></label>
+            <input
+                type="url"
+                class="form-control"
+                placeholder="https://youtube.com/..."
+                name="sourceLink">
+            </div>
+
+            <!-- Theme / Mood / Impact -->
+            <div class="row g-3 mb-4">
+
+            <!-- Theme -->
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Theme</label>
+                <select class="form-select" name="theme" required>
+                <option value="">Select</option>
+                <option>Mindset</option>
+                <option>Growth</option>
+                <option>Productivity</option>
+                <option>Discipline</option>
+                <option>Life</option>
+                </select>
+            </div>
+
+            <!-- Mood -->
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Mood</label>
+                <select class="form-select" name="mood">
+                <option value="">Select</option>
+                <option>😊 Positive</option>
+                <option>😐 Neutral</option>
+                <option>😔 Reflective</option>
+                <option>🔥 Motivated</option>
+                </select>
+            </div>
+
+            <!-- Impact -->
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Impact</label>
+                <select class="form-select" name="impact">
+                <option value="">Select</option>
+                <option>⭐ Low</option>
+                <option>⭐⭐ Medium</option>
+                <option>⭐⭐⭐ High</option>
+                <option>⭐⭐⭐⭐ Very High</option>
+                </select>
+            </div>
+
+            </div>
+
+            <!-- Date Watched -->
+            <div class="mb-5">
+            <label class="form-label fw-semibold">Date Watched</label>
+            <input
+                type="date"
+                class="form-control"
+                name="dateWatched"
+                required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="submit-thought btn">
+                    Keep this thought
+                </button>
+                  <a href="/thoughts" class="cancel-thought btn btn-outline-secondary mt-2">
+                    Change my mind
+                  </a>
+            </div>
+
+        </form>
+    </div>
+</div>
