@@ -1,64 +1,72 @@
 const User = require('../models/User');
 const mongoose = require('mongoose');
 
+// HOME PAGE
+exports.homePage = (req, res) => {
+  res.render('home', {
+    title: 'Home',
+    description: 'This is the home page description'
+  });
+};
 
-//Get HomePage
+// USER LIST (with pagination)
+exports.listUsers = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 5;
+  const skip = (page - 1) * limit;
+  
+  try {
+    const totalUsers = await User.countDocuments();
+    const users = await User.find({})
+      .sort({ createdDate: -1 })
+      .skip(skip)
+      .limit(limit);
 
-exports.homePage = async (req, res) => {
+    const totalPages = Math.ceil(totalUsers / limit);
 
-    const messages = await req.flash("success");
-    const locals ={
-        title: "Home",
-        description: "This is the home page description"
-    }
-    //if you want to pass more data to the index.ejs, you can add more properties to the locals object examples:
-    // {locals, user: req.user, items: itemList}
-    //since we are only passing locals for now, we can just pass locals directly
+    res.render('user/list', {
+      title: 'Users',
+      description: 'User list',
+      users,
+      currentPage: page,
+      totalPages
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    try {
-        const users = await User.find({}).limit(5);
-        res.render('home', {locals, users, messages});
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
+// ADD USER PAGE
+exports.addUser = (req, res) => {
+  res.render('user/add', {
+    title: 'Add User',
+    description: 'This is the User page'
+  });
+};
 
-//Get New User Page
-exports.addUser = async (req, res) => {
-
-    const locals ={
-        title: "Add New User",
-        description: "This is the User page"
-    }
-    //if you want to pass more data to the index.ejs, you can add more properties to the locals object examples:
-    // {locals, user: req.user, items: itemList}
-    //since we are only passing locals for now, we can just pass locals directly
-    res.render('user/add', locals);
-
-}
-
-//Create New User Page
+// CREATE USER
 exports.postUser = async (req, res) => {
-
-    console.log(req.body);
-
-    const newUser = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: req.body.password
+  try {
+    await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password
     });
 
-    try {
+    req.flash('success', 'User Created Successfully');
+    res.redirect('/users'); // redirect to list page
 
-        await User.create(newUser);
-        req.flash('success', 'User Created Successfully');
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        res.redirect('/');
-    }
-    catch (error) {
-        console.log(error);
-    }
-    // res.redirect('/users/add');
-}
+// res.render - direct access to a page
+// res.redirect - redirect to another route/page after an action like creating, updating, deleting data
+
+// post - redirect - get (PRG pattern)
+// post - submit form or data
+// redirect - after getting post request, redirect to another route/page
+// get - fetching data from db then display the page with updated data
+

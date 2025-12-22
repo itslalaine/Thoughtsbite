@@ -34,13 +34,30 @@ app.use(expressLayouts);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
 
+//Global Middleware
+app.use(async (req, res, next) => {
+  res.locals.messages = await req.flash('success');
+  res.locals.errorMessages = await req.flash('error');
+  next();
+});
+
+//Ensures title and description always exist
+app.use((req, res, next) => {
+  res.locals.title = 'ThoughtsBite';
+  res.locals.description = 'A personal learning tracker';
+  next();
+});
+
 //Routes
 app.use('/', require('./server/routes/user'));
 app.use('/thoughts', require('./server/routes/thoughts'));
 
 //404 - Page Not Found
-app.get(/.*/, (req, res) => {
-    res.status(404).render('404');
+app.use((req, res) => {
+  res.status(404).render('404', {
+    title: 'Page Not Found',
+    description: 'The page you are looking for does not exist'
+  });
 });
 
 app.listen(port, () => {

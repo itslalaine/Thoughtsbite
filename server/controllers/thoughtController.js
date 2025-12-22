@@ -1,21 +1,20 @@
+// HOME PAGE
 exports.homePage = (req, res) => {
-  const locals = {
+  res.render('thought/list', {
     title: 'Thoughts',
     description: 'Your thoughts'
-  };
-
-  res.render('thought/list', { locals });
+  });
 };
 
+// ADD THOUGHT PAGE
 exports.addThought = (req, res) => {
-  const locals = {
+  res.render('thought/add', {
     title: 'Add Thought',
     description: 'Add a new thought'
-  };
-
-  res.render('thought/add', { locals });
+  });
 };
 
+// 
 exports.postThought = (req, res) => {
   res.redirect('/thoughts');
 };
