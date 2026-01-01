@@ -1,9 +1,11 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const mongoose = require('mongoose');
+// const flash = require('connect-flash');
 
 // HOME PAGE
 exports.homePage = (req, res) => {
-  res.render('home', {
+  res.render('index', {
     title: 'Home',
     description: 'This is the home page description'
   });
@@ -40,27 +42,74 @@ exports.listUsers = async (req, res) => {
 exports.addUser = (req, res) => {
   res.render('user/add', {
     title: 'Add User',
-    description: 'This is the User page'
+    description: 'This is the User page',
+    errors: {},
+    oldInput: {} 
   });
 };
 
 // CREATE USER
+
 exports.postUser = async (req, res) => {
-  try {
-    await User.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: req.body.password
-    });
+  const { firstName, lastName, email, password } = req.body;
 
-    req.flash('success', 'User Created Successfully');
-    res.redirect('/users'); // redirect to list page
+  let errors = {};
 
-  } catch (error) {
-    console.log(error);
+  // Password validation (server-side ONLY)
+  const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+  // empty First Name field validation
+  if (!firstName || firstName.trim() === '') {
+    errors.firstName = 'First Name is required.';
   }
+  // Empty Last Name field validation
+  if (!lastName || lastName.trim() === '') {
+    errors.lastName = 'Last Name is required.';
+  }
+  
+  if (!strongPasswordRegex.test(password)) {
+    errors.password =
+      'Password must be at least 8 characters and include uppercase, lowercase, and a number.';
+  }
+  // Empty Password field validation
+  if (!password || password.trim() === '') {
+    errors.password = 'Password is required.';
+  }
+  // Email uniqueness
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    errors.email = 'Email is already in use.';
+  }
+
+  if (!email || email.trim() === '') {
+    errors.email = 'Email is required.';
+  }
+
+  // If errors exist → re-render form
+  if (Object.keys(errors).length > 0) {
+    return res.render('user/add', {
+      title: 'Add User',
+      errors,
+      oldInput: req.body
+    });
+  }
+
+  // Create user if valid
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await User.create({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword
+  });
+
+  req.flash('success', 'User created successfully');
+  res.redirect('/users');
 };
+
+
 
 // res.render - direct access to a page
 // res.redirect - redirect to another route/page after an action like creating, updating, deleting data

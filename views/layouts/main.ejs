@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <% if (showNavbar) { %>
     <%- include('../partials/navbar.ejs') %>
+    <% } %>
     <div>
         <main>
             <%- body %>
