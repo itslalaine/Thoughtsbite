@@ -61,12 +61,21 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.redirect('/auth/login');
 
+  //User not found OR soft deleted
+  if (!user || user.isDeleted) {
+    req.flash('error', 'Invalid credentials');
+    return res.redirect('/auth/login');
+  }
+
+  //Password check
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.redirect('/auth/login');
+  if (!isMatch) {
+    req.flash('error', 'Invalid credentials');
+    return res.redirect('/auth/login');
+  }
 
-  //SAVE USER TO SESSION
+  //Save user to session
   req.session.user = {
     id: user._id,
     email: user.email,

@@ -25,27 +25,53 @@
         <!-- Collapsible menu -->
         <div class="collapse navbar-collapse justify-content-end me-lg-5" id="navbarNav">
             <ul class="navbar-nav gap-4 align-items-center align-items-center-lg">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Dashboard</a></li>
                 <% if (user && user.accountType === 'admin') { %>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users">Users</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        User
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/users">Users List</a></li>
+                        <li><a class="dropdown-item" href="/users/add">Add User</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/add">Add User</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Thoughts
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/thoughts">Thoughts List</a></li>
+                        <li><a class="dropdown-item" href="/thoughts/add">Add Thought</a></li>
+                    </ul>
                 </li>
-                <% } %>
-                <li class="nav-item"><a class="nav-link" href="/thoughts">Thoughts</a></li>
-                <!-- <li class="nav-item"><a class="nav-link" href="/add">User</a></li> -->
-                <li class="nav-item"><a class="btn add rounded-pill" href="/thoughts/add" role="button">Add Thought</a></li>              
+                <li class="nav-item"><a class="nav-link" href="/activity">My Activity</a></li>
                 <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
-                <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                <% } %>
+                <% if (user && user.accountType === 'standard') { %>
+                <li class="nav-item"><a class="nav-link" href="/activity">My Activity</a></li>
+                <li class="nav-item"><a class="btn add rounded-pill" href="/thoughts/add" role="button">Add Thought</a></li>  
+                <li class="nav-item"><a class="nav-link" href="/thoughts">Thoughts</a></li> 
+                <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+                <% } %>
                 <% if (user) { %>
-                <li>Welcome, <%= user.email %></li>
-                <form action="/auth/logout" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-link nav-link">
-                        Logout
-                    </button>
-                </form>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <%= user.email %>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li>
+                            <form action="/auth/logout" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-link nav-link">
+                                    Logout
+                                </button>
+                            </form>   
+                        </li>
+                    </ul>
+                </li>
                 <% } %>
             </ul>
         </div>
@@ -62,3 +88,39 @@
     }
 });
 </script> -->
+
+<!-- 
+Admin Navbar Structure
+Dashboard
+
+Users
+├── User List
+├── Add User
+
+Thoughts
+├── All Thoughts
+├── Add Thought
+
+Analytics
+
+Profile
+├── My Profile
+├── Logout
+
+User Navbar Structure
+Dashboard
+
+➕ Add Thought   (primary action)
+
+Thoughts
+├── My Thoughts
+
+Activity   ← NEW (Recent activity, updates, edits)
+
+Analytics
+
+Profile
+├── My Profile
+├── Logout
+
+-->

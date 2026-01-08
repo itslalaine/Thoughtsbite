@@ -10,8 +10,8 @@ router.get('/', userController.listUsers);
 router.get('/add', userController.addUser);
 router.post('/add', userController.postUser);
 
-// router.get('/:id/edit', isAdmin, userController.editUserPage);
-// router.post('/:id/edit', isAdmin, userController.updateUser);
-// router.post('/:id/delete', isAdmin, userController.deleteUser);
+router.get('/update/:id', isAdmin, userController.editUserPage);
+router.post('/update/:id', isAdmin, userController.updateUser);
+router.post('/delete/:id', isAdmin, userController.softDeleteUser);
 
 module.exports = router;

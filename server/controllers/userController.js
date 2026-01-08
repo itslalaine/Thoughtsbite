@@ -19,7 +19,7 @@ exports.listUsers = async (req, res) => {
   
   try {
     const totalUsers = await User.countDocuments();
-    const users = await User.find({})
+    const users = await User.find({isDeleted: false })
       .sort({ createdDate: -1 })
       .skip(skip)
       .limit(limit);
@@ -48,7 +48,7 @@ exports.addUser = (req, res) => {
   });
 };
 
-// CREATE USER
+// HANDLE ADD USER FORM SUBMISSION
 
 exports.postUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -107,6 +107,89 @@ exports.postUser = async (req, res) => {
 
   req.flash('success', 'User created successfully');
   res.redirect('/users');
+};
+
+// SHOW update form
+exports.editUserPage = async (req, res) => {
+  const userId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).render('404');
+  }
+
+  res.render('user/update', {
+    title: 'Update User',
+    description: 'Update user details',
+    errors: {},
+    oldInput: user
+  });
+};
+
+// HANDLE update submission
+exports.updateUser = async (req, res) => {
+  const userId = req.params.id;
+  const { firstName, lastName, email, password } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/users');
+    }
+
+    // Update basic fields
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+
+    // Update password ONLY if provided
+    if (password && password.trim() !== '') {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    user.updatedDate = Date.now();
+
+    await user.save();
+
+    req.flash('success', 'User updated successfully');
+    res.redirect('/users');
+
+  } catch (error) {
+    console.error(error);
+    req.flash('error', 'Update failed');
+    res.redirect(`/users/update/${userId}`);
+  }
+};
+
+// SOFT DELETE USER
+exports.softDeleteUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/users');
+    }
+
+    user.isDeleted = true;
+    user.deletedAt = Date.now();
+    user.deletedBy = req.session.user.id; 
+
+    await user.save();
+
+    req.flash('success', 'User deleted successfully');
+    res.redirect('/users');
+
+  } catch (error) {
+    console.error(error);
+    req.flash('error', 'Delete failed');
+    res.redirect('/users');
+  }
 };
 
 
