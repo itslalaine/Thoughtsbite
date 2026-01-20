@@ -53,6 +53,7 @@ app.use((req, res, next) => {
 
 app.use('/users', require('./server/routes/user'));
 app.use('/thoughts', require('./server/routes/thoughts'));
+// app.use('/thought', require('./server/routes/thought'));
 app.use('/auth', require('./server/routes/auth'));
 app.use('/dashboard', require('./server/routes/dashboard'));
 app.use('/', require('./server/routes/index'));

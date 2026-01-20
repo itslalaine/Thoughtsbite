@@ -1,0 +1,47 @@
+<div class="container my-5" style="max-width: 720px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+
+      <h4 class="fw-bold mb-3"><%= thought.theme %></h4>
+
+      <p class="fs-5 mb-4">
+        <%= thought.content %>
+      </p>
+
+      <hr>
+
+      <ul class="list-unstyled small text-muted">
+        <li><strong>Source:</strong> <%= thought.source || '—' %></li>
+
+        <% if (thought.sourceLink) { %>
+          <li>
+            <strong>Link:</strong>
+            <a href="<%= thought.sourceLink %>" target="_blank">
+              View source
+            </a>
+          </li>
+        <% } %>
+
+        <li><strong>Mood:</strong> <%= thought.mood || '—' %></li>
+        <li><strong>Impact:</strong> <%= thought.impact || '—' %></li>
+        <li>
+          <strong>Date Watched:</strong>
+          <%= thought.dateWatched?.toDateString() %>
+        </li>
+      </ul>
+
+      <div class="d-flex gap-2 mt-4">
+        <a href="/thoughts" class="btn btn-outline-secondary">
+          Back
+        </a>
+
+        <% if (user && (user.accountType === 'admin' || user.id === thought.user._id.toString())) { %>
+          <a href="/thoughts/edit/<%= thought._id %>" class="btn btn-outline-primary">
+            Edit
+          </a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -3,11 +3,11 @@
   <div class="thought-outline mx-auto">
     <!-- Page Title -->
     <div class="text-center mb-5">
-      <h2 class="add-title fw-bold">New Thought</h2>
-      <p class="text-muted">Capture what resonated with you today</p>
+      <h2 class="add-title fw-bold">Edit Thought</h2>
+      <p class="text-muted">Refine or update your reflection</p>
     </div>
 
-    <form method="POST" action="/thoughts/add" class="my-3">
+    <form method="POST" action="/thoughts/edit/<%= thought._id %>" class="my-3">
 
       <!-- Thought Content -->
       <div class="mb-4">
@@ -15,9 +15,9 @@
         <textarea
           class="form-control"
           rows="5"
-          placeholder="Write the key idea or lesson you want to remember..."
           name="content"
-          required></textarea>
+          required
+        ><%= thought.content %></textarea>
       </div>
 
       <!-- Source -->
@@ -26,8 +26,8 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Book, video, podcast, article title"
-          name="source">
+          name="source"
+          value="<%= thought.source || '' %>">
       </div>
 
       <!-- Source Link -->
@@ -38,8 +38,8 @@
         <input
           type="url"
           class="form-control"
-          placeholder="https://youtube.com/..."
-          name="sourceLink">
+          name="sourceLink"
+          value="<%= thought.sourceLink || '' %>">
       </div>
 
       <!-- Theme / Mood / Impact -->
@@ -50,11 +50,11 @@
           <label class="form-label fw-semibold">Theme</label>
           <select class="form-select" name="theme">
             <option value="">Select</option>
-            <option value="Mindset">Mindset</option>
-            <option value="Growth">Growth</option>
-            <option value="Productivity">Productivity</option>
-            <option value="Discipline">Discipline</option>
-            <option value="Life">Life</option>
+            <% ['Mindset','Growth','Productivity','Discipline','Life'].forEach(t => { %>
+              <option value="<%= t %>" <%= thought.theme === t ? 'selected' : '' %>>
+                <%= t %>
+              </option>
+            <% }) %>
           </select>
         </div>
 
@@ -63,11 +63,11 @@
           <label class="form-label fw-semibold">Mood</label>
           <select class="form-select" name="mood">
             <option value="">Select</option>
-            <option value="motivated">😊 Motivated</option>
-            <option value="neutral">😐 Neutral</option>
-            <option value="confused">😔 Confused</option>
-            <option value="inspired">🔥 Inspired</option>
-            <option value="overwhelmed">😰 Overwhelmed</option>
+            <option value="motivated" <%= thought.mood === 'motivated' ? 'selected' : '' %>>😊 Motivated</option>
+            <option value="neutral" <%= thought.mood === 'neutral' ? 'selected' : '' %>>😐 Neutral</option>
+            <option value="confused" <%= thought.mood === 'confused' ? 'selected' : '' %>>😔 Confused</option>
+            <option value="inspired" <%= thought.mood === 'inspired' ? 'selected' : '' %>>🔥 Inspired</option>
+            <option value="overwhelmed" <%= thought.mood === 'overwhelmed' ? 'selected' : '' %>>😰 Overwhelmed</option>
           </select>
         </div>
 
@@ -76,9 +76,9 @@
           <label class="form-label fw-semibold">Impact</label>
           <select class="form-select" name="impact">
             <option value="">Select</option>
-            <option value="low">⭐ Low</option>
-            <option value="medium">⭐⭐ Medium</option>
-            <option value="high">⭐⭐⭐ High</option>
+            <option value="low" <%= thought.impact === 'low' ? 'selected' : '' %>>⭐ Low</option>
+            <option value="medium" <%= thought.impact === 'medium' ? 'selected' : '' %>>⭐⭐ Medium</option>
+            <option value="high" <%= thought.impact === 'high' ? 'selected' : '' %>>⭐⭐⭐ High</option>
           </select>
         </div>
 
@@ -90,16 +90,17 @@
         <input
           type="date"
           class="form-control"
-          name="dateWatched">
+          name="dateWatched"
+          value="<%= thought.dateWatched?.toISOString().split('T')[0] %>">
       </div>
 
       <!-- Submit Buttons -->
       <div class="d-grid gap-2 mt-4">
         <button type="submit" class="submit-thought btn">
-          Keep this thought
+          Update Thought
         </button>
         <a href="/thoughts" class="cancel-thought btn btn-outline-secondary mt-2">
-          Change my mind
+          Cancel
         </a>
       </div>
 
