@@ -8,12 +8,16 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 } */
 
+.navbar {
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
 </style>
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg py-3 sticky-top custom-navbar"> <!-- shadow-sm -->
+<nav class="navbar navbar-expand-lg py-3 custom-navbar"> <!-- shadow-sm -->
     <div class="container-fluid"> 
         <!-- container-lg for centering all of the content -->
-         
         <a class="navbar-brand ms-lg-5" aria-current="page" href="/">ThoughtsBite</a>
 
         <!-- Hamburger button -->
@@ -25,36 +29,34 @@
         <!-- Collapsible menu -->
         <div class="collapse navbar-collapse justify-content-end me-lg-5" id="navbarNav">
             <ul class="navbar-nav gap-4 align-items-center align-items-center-lg">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>" aria-current="page" href="/">Overview</a></li>
                 <% if (user && user.accountType === 'admin') { %>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <%= currentPath === '/dashboard' ? 'active' : '' %>"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         User
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/users">Users List</a></li>
-                        <li><a class="dropdown-item" href="/users/add">Add User</a></li>
+                        <li><a class="dropdown-item nav-link <%= currentPath === '/users' ? 'active' : '' %>" href="/users">Users List</a></li>
+                        <li><a class="dropdown-item nav-link <%= currentPath === '/users/add' ? 'active' : '' %>" href="/users/add">Add User</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Something else here</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Thoughts
+                    <a class="nav-link dropdown-toggle <%= currentPath === '/thoughts' ? 'active' : '' %>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        My Thoughts
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/thoughts">Thoughts List</a></li>
-                        <li><a class="dropdown-item" href="/thoughts/add">Add Thought</a></li>
+                        <li><a class="dropdown-item nav-link <%= currentPath === '/thoughts' ? 'active' : '' %>" href="/thoughts">Thoughts List</a></li>
+                        <li><a class="dropdown-item nav-link <%= currentPath === '/thoughts/add' ? 'active' : '' %>" href="/thoughts/add">Add Thought</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/activity">My Activity</a></li>
-                <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Analytics</a></li>
                 <% } %>
                 <% if (user && user.accountType === 'standard') { %>
                 <li class="nav-item"><a class="btn add rounded-pill" href="/thoughts/add" role="button">Add Thought</a></li>  
-                <li class="nav-item"><a class="nav-link" href="/thoughts">Thoughts</a></li> 
-                <li class="nav-item"><a class="nav-link" href="/activity">Activity</a></li>
-                <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/thoughts' ? 'active' : '' %>" href="/thoughts">Thoughts</a></li> 
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Analytics</a></li>
                 <% } %>
                 <% if (user) { %>
                 <li class="nav-item dropdown">
@@ -100,17 +102,18 @@ Users
 Thoughts
 ├── All Thoughts
 ├── Add Thought
+├── Deleted Thoughts
 
 Analytics
 
 Profile
-├── My Profile
+├── My Profile ()
 ├── Logout
 
 User Navbar Structure
 Dashboard
 
-➕ Add Thought   (primary action)
+Add Thought   (primary action)
 
 Thoughts
 ├── My Thoughts

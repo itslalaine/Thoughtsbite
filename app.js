@@ -49,6 +49,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
+
 /* ------------------ ROUTES ------------------ */
 
 app.use('/users', require('./server/routes/user'));
@@ -57,6 +62,7 @@ app.use('/thoughts', require('./server/routes/thoughts'));
 app.use('/auth', require('./server/routes/auth'));
 app.use('/dashboard', require('./server/routes/dashboard'));
 app.use('/', require('./server/routes/index'));
+app.use('/profile', require('./server/routes/profile'));
 
 /* ------------------ 404 ------------------ */
 

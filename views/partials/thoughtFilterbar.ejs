@@ -1,0 +1,135 @@
+<style>
+    /* Wrapper that sticks */
+.thought-search-wrapper {
+  position: sticky;
+  top: 84px; /* adjust based on navbar height */
+  background: #fff;
+  z-index: 100;
+  border-bottom: 1px solid #e5e7eb;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Search bar container */
+.thought-search-bar {
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+/* Search input */
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+}
+
+.search-input-wrapper i {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.search-input:focus {
+  box-shadow: none;
+}
+
+/* Right-side filters */
+.search-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.search-actions select {
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+</style>
+
+<!-- <div class="thoughts-page"> -->
+<form method="GET" action="/thoughts" class="thought-search-wrapper sticky-top py-3">
+  <div class="thought-search-bar mx-auto">
+
+    <!-- Search -->
+    <div class="search-input-wrapper">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        name="search"
+        class="form-control search-input"
+        placeholder="Search thoughts..."
+        value="<%= query?.search || '' %>"
+      />
+    </div>
+
+    <!-- Filters -->
+    <div class="search-actions">
+
+      <select name="theme" class="form-select form-select-sm">
+        <option value="">Theme</option>
+        <% ['Mindset','Growth','Productivity','Discipline','Life'].forEach(t => { %>
+          <option value="<%= t %>" <%= query?.theme === t ? 'selected' : '' %>>
+            <%= t %>
+          </option>
+        <% }) %>
+      </select>
+
+      <select name="sort" class="form-select form-select-sm">
+        <option value="newest" <%= query?.sort !== 'oldest' ? 'selected' : '' %>>
+          Newest
+        </option>
+        <option value="oldest" <%= query?.sort === 'oldest' ? 'selected' : '' %>>
+          Oldest
+        </option>
+      </select>
+
+    </div>
+
+  </div>
+</form>
+
+<!-- </div> -->
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const themeFilter = document.getElementById('themeFilter');
+  const thoughtItems = document.querySelectorAll('.thought-item');
+  const form = document.querySelector('.thought-search-wrapper');
+
+  function filterThoughts() {
+    const searchValue = searchInput.value.toLowerCase();
+    const themeValue = themeFilter.value.toLowerCase();
+
+    thoughtItems.forEach(item => {
+      const content = item.innerText.toLowerCase();
+      const theme = item.querySelector('.meta-click')?.innerText.toLowerCase() || '';
+
+      const matchesSearch = content.includes(searchValue);
+      const matchesTheme = !themeValue || theme === themeValue;
+
+      item.style.display = (matchesSearch && matchesTheme) ? '' : 'none';
+    });
+  }
+
+    document.querySelectorAll('select').forEach(select => {
+    select.addEventListener('change', () => {
+      select.closest('form').submit();
+    });
+  });
+  searchInput.addEventListener('input', filterThoughts);
+  themeFilter.addEventListener('change', filterThoughts);
+</script>

@@ -1,0 +1,84 @@
+<style>
+.thought-content {
+  white-space: pre-line;
+  transition: all 0.2s ease;
+}
+
+/* collapsed preview */
+.thought-content.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;   /* 👈 number of lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
+
+<div class="container my-5" style="max-width: 720px;">
+  <h3 class="mb-4">Deleted Thoughts</h3>
+
+  <% if (thoughts.length === 0) { %>
+    <p class="text-muted">You have no deleted thoughts.</p>
+  <% } else { %>
+
+    <% thoughts.forEach(thought => { %>
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+
+          <!-- Theme -->
+          <small class="text-muted fw-semibold">
+            <%= thought.theme || 'Uncategorized' %>
+          </small>
+
+          <!-- Content -->
+          <p
+            class="mt-2 thought-content collapsed"
+            id="content-<%= thought._id %>"
+          >
+            <%= thought.content %>
+          </p>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-between align-items-center mt-3">
+
+            <button
+              class="btn btn-link p-0 text-decoration-none"
+              type="button"
+              onclick="toggleThought('<%= thought._id %>')"
+              id="toggle-<%= thought._id %>"
+            >
+              Show more
+            </button>
+
+            <form
+              action="/profile/restore/<%= thought._id %>"
+              method="POST"
+            >
+              <button class="btn btn-sm btn-outline-success">
+                Restore
+              </button>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    <% }) %>
+
+  <% } %>
+</div>
+
+<script>
+  function toggleThought(id) {
+    const content = document.getElementById(`content-${id}`);
+    const button = document.getElementById(`toggle-${id}`);
+
+    if (content.classList.contains('collapsed')) {
+      content.classList.remove('collapsed');
+      button.textContent = 'Show less';
+    } else {
+      content.classList.add('collapsed');
+      button.textContent = 'Show more';
+    }
+  }
+</script>
+

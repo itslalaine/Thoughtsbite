@@ -1,18 +1,34 @@
 <style>
 .thought-list-wrapper {
-  padding-top: 40px; /* adjust based on navbar height */
+  /* padding-top: 40px; */
+  padding-bottom: 80px;
+
 }
 
 .thought-list {
   max-width: 720px;   /* sweet spot for reading */
+  padding-top: 40px; /* space for filter bar */
 }
 
-  .thought-item {
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+.thought-item {
+    max-width: 720px; /* adjust size */
+    margin: 0 auto 20px auto; /* center horizontally */
+    padding: 20px;
+    background: #fcfcff;
+    border-radius: 16px;
+    border: #5c5c60 3px solid;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  /* transition: background 0.2s ease, box-shadow 0.2s ease; */
 }
 
 .thought-item:hover {
-  background: #fafafa;
+    background: #fafafa;
+    transform: translateY(-3px);
+    transition: 0.25s ease;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+    transform: translateY(-3px);
+    transition: 0.25s ease;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
@@ -82,42 +98,140 @@
   border-left-color: #fd7e14;
 }
 
+/* Three-dot button */
+.btn-icon {
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  line-height: 1;
+}
+
+.btn-icon i {
+  font-size: 1.3rem; /* makes dots bigger */
+  color: #6c757d;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-icon:hover i {
+  color: #212529;
+  transform: scale(1.1);
+}
+
+/* Remove Bootstrap caret */
+.dropdown-toggle::after {
+  display: none;
+}
+
+/* Dropdown styling */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 6px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* When dropdown is shown */
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.thought-meta-icon {
+  font-size: 1rem;
+  color: #6c757d;
+  transition: color 0.2s ease;
+}
+
+.thought-meta-icon:hover {
+  color: #212529;
+}
+
+.thought-item:focus-within .thought-actions,
+.thought-item:focus-within .dropdown-menu {
+  opacity: 1;
+}
 </style>
 <div class="thought-list-wrapper">
+    <%- include('../partials/thoughtFilterBar') %>
   <div class="thought-list mx-auto">
-    <% if (thoughts.length === 0) { %>
-      <div class="container my-5" style="max-width: 720px;">
-        <div class="card border-0 shadow-sm text-center">
-          <div class="card-body py-5">
+<% if (thoughts.length === 0) { %>
 
-            <h4 class="fw-bold mb-2">Nothing here yet ✨</h4>
-            <p class="text-muted mb-4">
-              Thoughts you save will appear here.
-            </p>
+  <% if (filters?.search || filters?.theme || filters?.sort) { %>
+    <!-- 🔍 No results for search/filter -->
+    <div class="text-center text-muted mt-5">
+      <p>No thoughts matched your search.</p>
+      <a href="/thoughts" class="btn btn-sm btn-outline-secondary">
+        Clear filters
+      </a>
+    </div>
 
-            <a href="/thoughts/add" class="btn btn-primary">
-              Capture a thought
-            </a>
+  <% } else { %>
+    <!-- 🌱 First-time empty state -->
+    <div class="text-center text-muted mt-5">
+      <p>You haven’t added any thoughts yet.</p>
+      <a href="/thoughts/add" class="btn btn-primary mt-2">
+        Add your first thought
+      </a>
+    </div>
+  <% } %>
 
-          </div>
-        </div>
-      </div>
     <% } else { %>
     <% thoughts.forEach(thought => { %>
-      <div class="thought-item border rounded-4 p-3 mb-3 shadow-sm">
+      <div class="thought-item rounded-4 p-3 mb-3 shadow-sm">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-start mb-1">
-          <h6 class="fw-semibold mb-0">
-            <a
-              href="/thoughts/<%= thought._id %>"
-              class="meta-click theme-<%= thought.theme.toLowerCase() %>"
+          <div>
+            <h6 class="fw-semibold mb-2">
+              <a
+                href="/thoughts/<%= thought._id %>"
+                class="meta-click theme-<%= thought.theme.toLowerCase() %>"
+              >
+                <%= thought.theme %>
+              </a>
+            </h6>
+            <small class="text-muted">
+                <%= new Date(thought.dateWatched || thought.createdAt).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric'
+                }) %>
+            </small>
+          </div>
+          <!-- Three dots menu -->
+          <div class="dropdown">
+            <button
+              class="btn btn-icon dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-              <%= thought.theme %>
-            </a>
-          </h6>
-          <small class="text-muted">
-            <%= new Date(thought.dateWatched || thought.createdAt).toLocaleDateString() %>
-          </small>
+              <i class="bi bi-three-dots"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              <li>
+                <a class="dropdown-item" href="/thoughts/edit/<%= thought._id %>">
+                  <i class="bi bi-pencil me-2"></i>Edit
+                </a>
+              </li>
+              <li>
+                <form
+                  action="/thoughts/<%= thought._id %>/delete"
+                  method="POST"
+                  onsubmit="return confirm('Delete this thought?');"
+                >
+                  <button class="dropdown-item text-danger">
+                    <i class="bi bi-trash me-2"></i>Remove
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <!-- Snippet -->
@@ -130,27 +244,27 @@
           <% if (thought.mood) { %>
             <% if (thought.mood === 'motivated') { %>
             <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-emoji-smile"></i> 
+              <i class="bi bi-emoji-smile thought-meta-icon"></i> 
             </span>
             <% } %>
             <% if (thought.mood === 'neutral') { %>
             <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-emoji-neutral"></i>
+              <i class="bi bi-emoji-neutral thought-meta-icon"></i>
             </span>
             <% } %>
             <% if (thought.mood === 'confused') { %>
             <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-question-circle"></i>
+              <i class="bi bi-question-circle thought-meta-icon"></i>
             </span>
             <% } %>
             <% if (thought.mood === 'inspired') { %>
             <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-lightbulb"></i>
+              <i class="bi bi-lightbulb thought-meta-icon"></i>
             </span>
             <% } %>
             <% if (thought.mood === 'overwhelmed') { %>
             <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-exclamation-circle "></i>
+              <i class="bi bi-exclamation-circle thought-meta-icon"></i>
             </span>
             <% } %>
           <% } %>
@@ -158,42 +272,25 @@
           <% if (thought.impact) { %>
             <% if (thought.impact === 'high') { %>
               <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>     
+                <i class="bi bi-star-fill thought-meta-icon"></i>
+                <i class="bi bi-star-fill thought-meta-icon"></i>
+                <i class="bi bi-star-fill thought-meta-icon"></i>
+   
               </span>
             <% } %>
             <% if (thought.impact === 'medium') { %>
               <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>   
+                <i class="bi bi-star-fill thought-meta-icon"></i>
+                <i class="bi bi-star-fill thought-meta-icon"></i>   
               </span>
             <% } %>
             <% if (thought.impact === 'low') { %>
               <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill thought-meta-icon"></i>
               </span>
             <% } %>
           <% } %>
         </div>
-
-        <!-- Actions -->
-        <div class="d-flex justify-content-end gap-2 thought-actions">
-          <a href="/thoughts/edit/<%= thought._id %>" class="btn btn-sm btn-outline-primary">
-            Edit
-          </a>
-          <form
-            action="/thoughts/<%= thought._id %>/delete"
-            method="POST"
-            onsubmit="return confirm('Delete this thought?');"
-            class="d-inline"
-          >
-            <button class="btn btn-sm btn-outline-danger">
-              Remove
-            </button>
-          </form>
-        </div>
-
       </div>
     <% }) %>
     <% } %>

@@ -1,6 +1,6 @@
 exports.dashboardPage = (req, res) => {
   res.render('dashboard/index', {
-    title: 'Dashboard',
+    title: 'Overview',
     description: 'Your private dashboard'
   });
 

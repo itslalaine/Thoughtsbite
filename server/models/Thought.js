@@ -43,11 +43,9 @@ const ThoughtSchema = new mongoose.Schema(
       enum: ['low', 'medium', 'high'],
       default: 'medium'
     },
-
     dateWatched: {
       type: Date
     },
-
     isDeleted: {
       type: Boolean,
       default: false

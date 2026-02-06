@@ -92,6 +92,16 @@ body {
 
  /* homepage */
  /* Navbar */
+ .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.thoughts-page ~ .navbar {
+  position: static;
+}
+
 .navbar-brand {
   font-family: 'Quicksand', sans-serif;
   font-size: 36px;
@@ -284,75 +294,6 @@ body {
     margin: 0;
     font-weight: 375;
     /* line-height: 50px; */
-}
-
-/* recent activity */
-.recentactivity h1 {
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 48px;
-}
-
-.recentactivity .activity-item {
-    max-width: 650px; /* adjust size */
-    margin: 0 auto 20px auto; /* center horizontally */
-    padding: 20px;
-    background: #fcfcff;
-    border-radius: 16px;
-    border: #3c3c4a 3px solid;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-}
-
-.activity-item:hover {
-    background: rgba(0,0,0,0.05);
-    transform: translateY(-3px);
-    transition: 0.25s ease;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
-}
-
-.recent-thoughts {
-    font-size: 16px;
-    color: #333;
-}
-
-.date-text {
-    font-size: 15px;
-    color: #555;
-}
-
-.activity-status {
-    display: inline-block;
-    font-size: .75rem;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-weight: 600;
-}
-
-.activity-status.updated {
-    background: #e0f3ff;
-    color: #0a4b78;
-}
-
-.activity-status.new {
-    background: #d1e7dd;
-    color: #0f5132;
-}
-
-.activity-status.viewed {
-    background: #f8d7da;
-    color: #842029;
-}
-
-.btn-activity {
-    border-radius: 25px;
-    padding: 8px 25px;
-    color: #e3f2fd;
-    background-color: #3c3c4a;
-}
-
-.btn-activity:hover {
-    background-color: #2a2a38;
-    color: #fff;
 }
 
 /* Add Thought Page */

@@ -5,16 +5,54 @@ const User = require('../models/User');
 // LIST THOUGHTS (PRIVATE)
 exports.thoughtPage = async (req, res) => {
   try {
-   const thoughts = await Thought.find({
-    user: req.user.id,
-    isDeleted: false
-  })
-  .sort({ dateWatched: -1, createdAt: -1 });
+    const { search, theme, sort } = req.query;
+
+    // Base query (always applied)
+    const query = {
+      user: req.session.user.id,
+      isDeleted: false
+    };
+
+    //Search
+    if (search) {
+      query.$or = [
+        { content: { $regex: search, $options: 'i' } },
+        { theme: { $regex: search, $options: 'i' } },
+        { mood: { $regex: search, $options: 'i' } },
+        { impact: { $regex: search, $options: 'i' } },
+        { source: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    if (search && /^\d{4}$/.test(search)) {
+      const year = Number(search);
+      query.dateWatched = {
+        $gte: new Date(`${year}-01-01`),
+        $lte: new Date(`${year}-12-31`)
+      };
+    }
+
+    //Theme filter
+    if (theme) {
+      query.theme = theme;
+    }
+
+    // ↕ Sorting
+    let sortOption = { dateWatched: -1, createdAt: -1 }; // default (newest)
+
+    if (sort === 'oldest') {
+      sortOption = { dateWatched: 1, createdAt: 1 };
+    }
+
+    const thoughts = await Thought.find(query).sort(sortOption);
 
     res.render('thought/list', {
       title: 'Thoughts',
       description: 'Your thoughts',
-      thoughts
+      pageClass: 'thoughts-page',
+      thoughts,
+      query: req.query, //important for keeping filters selected
+      filters: { search, theme, sort } 
     });
 
   } catch (error) {
@@ -22,6 +60,7 @@ exports.thoughtPage = async (req, res) => {
     res.redirect('/dashboard');
   }
 };
+
 
 
 // ADD THOUGHT PAGE
@@ -156,7 +195,7 @@ exports.updateThought = async (req, res) => {
 
     const thought = await Thought.findOne({
       _id: thoughtId,
-      deletedAt: null
+      isDeleted: false
     });
 
     if (!thought) {
@@ -221,5 +260,7 @@ exports.deleteThought = async (req, res) => {
     res.redirect('/thoughts');
   }
 };
+
+
 
 

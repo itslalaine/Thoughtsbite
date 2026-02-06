@@ -1,47 +1,231 @@
+<style>
+.thought-card {
+  border: 2px solid #2e2e3a;
+  border-radius: 18px;
+  padding: 20px;
+  background: #fff;
+  max-width: 720px;
+}
+
+/* Header */
+.thought-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.thought-meta {
+  display: flex;
+  gap: 12px;
+}
+
+.theme-indicator {
+  width: 4px;
+  border-radius: 4px;
+  background: #ff7a00; /* theme color later */
+}
+
+.thought-theme {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.thought-date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Content */
+.thought-content {
+  margin: 16px 0 20px;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Footer */
+.thought-footer {
+  display: flex;
+  gap: 20px;
+  color: #555;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Three dots button */
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+}
+
+.icon-btn:focus {
+  outline: 2px solid #4caf50;
+  border-radius: 8px;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 8px;
+  min-width: 140px;
+
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.dropdown.open .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  width: 100%;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background: #f4f4f6;
+}
+
+.dropdown-menu .danger {
+  color: #d32f2f;
+}
+
+.btn-icon {
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  line-height: 1;
+}
+
+.btn-icon i {
+  font-size: 1.3rem; /* makes dots bigger */
+  color: #6c757d;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-icon:hover i {
+  color: #212529;
+  transform: scale(1.1);
+}
+
+/* Remove Bootstrap caret */
+.dropdown-toggle::after {
+  display: none;
+}
+
+</style>
+
 <div class="container my-5" style="max-width: 720px;">
-  <div class="card shadow-sm border-0">
-    <div class="card-body p-4">
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <a href="/thoughts" class="text-muted small text-decoration-none">
+    ← Back to thoughts
+  </a>
+</div>
+<div class="thought-card border rounded-4 p-4 shadow-sm">
+  <!-- Header -->
+  <div class="thought-header">
+    <div class="thought-meta">
+      <span class="theme-indicator"></span>
+      <div>
+        <h4 class="thought-theme"><%= thought.theme %></h4>
+        <span class="thought-date">
+          <%= new Date(thought.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+          }) %>
+        </span>
+      </div>
+    </div>
 
-      <h4 class="fw-bold mb-3"><%= thought.theme %></h4>
-
-      <p class="fs-5 mb-4">
-        <%= thought.content %>
-      </p>
-
-      <hr>
-
-      <ul class="list-unstyled small text-muted">
-        <li><strong>Source:</strong> <%= thought.source || '—' %></li>
-
-        <% if (thought.sourceLink) { %>
-          <li>
-            <strong>Link:</strong>
-            <a href="<%= thought.sourceLink %>" target="_blank">
-              View source
-            </a>
-          </li>
-        <% } %>
-
-        <li><strong>Mood:</strong> <%= thought.mood || '—' %></li>
-        <li><strong>Impact:</strong> <%= thought.impact || '—' %></li>
-        <li>
-          <strong>Date Watched:</strong>
-          <%= thought.dateWatched?.toDateString() %>
-        </li>
-      </ul>
-
-      <div class="d-flex gap-2 mt-4">
-        <a href="/thoughts" class="btn btn-outline-secondary">
-          Back
-        </a>
-
+    <!-- Three dots -->
+          <!-- <div class="dropdown">
+            <button
+              class="btn btn-icon dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-three-dots"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              <li>
+                <a class="dropdown-item" href="/thoughts/edit/<%= thought._id %>">
+                  <i class="bi bi-pencil me-2"></i>Edit
+                </a>
+              </li>
+              <li>
+                <form
+                  action="/thoughts/<%= thought._id %>/delete"
+                  method="POST"
+                  onsubmit="return confirm('Delete this thought?');"
+                >
+                  <button class="dropdown-item text-danger">
+                    <i class="bi bi-trash me-2"></i>Remove
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div> -->
+  
+    <div class="d-flex mt-4">
         <% if (user && (user.accountType === 'admin' || user.id === thought.user._id.toString())) { %>
           <a href="/thoughts/edit/<%= thought._id %>" class="btn btn-outline-primary">
-            Edit
+            <i class="bi bi-pencil me-2"></i>Edit
           </a>
         <% } %>
-      </div>
+   </div>
+  
+  </div>
 
+  <!-- Content -->
+  <div class="mt-3 mb-4" style="white-space: pre-wrap;">
+    <%= thought.content %>
+  </div>
+
+  <!-- Footer -->
+  <div class="thought-footer">
+    <div class="meta-item">
+      <i class="bi bi-emoji-smile"></i>
+      <span><%= thought.mood %></span>
+    </div>
+
+    <div class="meta-item">
+      <i class="bi bi-star-fill"></i>
+      <span><%= thought.impact %>/5</span>
     </div>
   </div>
+</div>
+
 </div>
