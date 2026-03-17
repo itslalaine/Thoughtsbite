@@ -1,0 +1,59 @@
+<style>
+  .summary{
+margin-top:20px;
+line-height:1.8;
+font-size:18px;
+}
+
+.insights{
+display:grid;
+grid-template-columns: repeat(3,1fr);
+gap:20px;
+margin-top:25px;
+}
+
+.insight-card{
+background:#fafafa;
+padding:20px;
+border-radius:12px;
+border:1px solid #eee;
+}
+</style>
+<h1>Your Thought Insights</h1>
+
+<div class="summary">
+
+<p>
+You’ve captured <strong><%= totalThoughts %></strong> thoughts so far.
+</p>
+
+<p>
+This month you added <strong><%= thoughtsThisMonth %></strong> new reflections.
+</p>
+
+<p>
+ You're on a <strong><%= streak %>-day streak</strong>.
+</p>
+
+</div>
+
+<h2>Your Patterns</h2>
+
+<div class="insights">
+
+<div class="insight-card">
+<h3>💡 Most Explored Theme</h3>
+<p><%= mostUsedTheme %></p>
+</div>
+
+<div class="insight-card">
+<h3>😊 Most Common Mood</h3>
+<p><%= mostCommonMood %></p>
+</div>
+
+<div class="insight-card">
+<h3>🎧 Top Learning Source</h3>
+<p><%= topSource %></p>
+</div>
+
+</div>

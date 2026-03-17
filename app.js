@@ -63,6 +63,7 @@ app.use('/auth', require('./server/routes/auth'));
 app.use('/dashboard', require('./server/routes/dashboard'));
 app.use('/', require('./server/routes/index'));
 app.use('/profile', require('./server/routes/profile'));
+app.use('/analytics', require('./server/routes/analytics'));
 
 /* ------------------ 404 ------------------ */
 
