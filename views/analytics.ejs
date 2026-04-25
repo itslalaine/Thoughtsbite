@@ -1,59 +1,218 @@
 <style>
-  .summary{
-margin-top:20px;
-line-height:1.8;
-font-size:18px;
+.analytics-page {
+    max-width: 850px;
 }
 
-.insights{
-display:grid;
-grid-template-columns: repeat(3,1fr);
-gap:20px;
-margin-top:25px;
+
+/* header */
+
+.analytics-title {
+    font-weight: 600;
 }
 
-.insight-card{
-background:#fafafa;
-padding:20px;
-border-radius:12px;
-border:1px solid #eee;
+.analytics-subtitle {
+    color: #777;
+    margin-top: -5px;
+}
+
+
+/* cards */
+
+.analytics-card {
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    color: #2d2d2d;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+    transition: transform .15s ease;
+}
+
+.analytics-card:hover {
+    transform: translateY(-3px);
+}
+
+
+.analytics-label {
+
+    font-size: 14px;
+
+    opacity: .8;
+
+    margin-bottom: 6px;
+}
+
+
+.analytics-value {
+
+    font-size: 26px;
+
+    font-weight: 600;
+}
+
+
+.analytics-note {
+
+    font-size: 13px;
+
+    opacity: .7;
+
+    margin-top: 4px;
+}
+
+
+/* soft colors */
+
+.streak {
+    background: #7FA1C3;
+}
+
+.week {
+    background: #E6CF8B;
+}
+
+.theme {
+    background: #6BA292;
+}
+
+.rating {
+    background: #E59B7D;
+}
+
+
+
+/* chart */
+
+.analytics-chart {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+
+.chart-title {
+
+    font-weight: 600;
+
+    margin-bottom: 15px;
+}
+
+
+
+/* insights */
+
+.analytics-insights {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.insight-title {
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+}
+
+.analytics-insights ul {
+
+    padding-left: 18px;
+
+    color: #555;
+}
+
+.analytics-insights li {
+
+    margin-bottom: 6px;
 }
 </style>
-<h1>Your Thought Insights</h1>
+<div class="container analytics-page">
 
-<div class="summary">
+    <!-- HEADER -->
+    <div class="text-center mb-4">
+        <h2 class="analytics-title">Your Reflection</h2>
+        <p class="analytics-subtitle">A look into your growth patterns.</p>
+    </div>
 
-<p>
-You’ve captured <strong><%= totalThoughts %></strong> thoughts so far.
-</p>
+    <!-- HERO STATS -->
+    <div class="row g-3 mb-4">
 
-<p>
-This month you added <strong><%= thoughtsThisMonth %></strong> new reflections.
-</p>
+        <div class="col-md-6">
+            <div class="analytics-card streak">
+                <div class="analytics-label">🔥 Current Streak</div>
+                <div class="analytics-value"><%= streak %> days</div>
+                <div class="analytics-note">consistency builds clarity</div>
+            </div>
+        </div>
 
-<p>
- You're on a <strong><%= streak %>-day streak</strong>.
-</p>
+        <div class="col-md-6">
+            <div class="analytics-card week">
+                <div class="analytics-label">💭 Thoughts this month</div>
+                <div class="analytics-value"><%= thoughtsThisMonth %></div>
+                <div class="analytics-note">small reflections matter</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PATTERNS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+            <div class="analytics-card theme">
+                <div class="analytics-label">🏷 Most used theme</div>
+                <div class="analytics-value"><%= mostUsedTheme %></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="analytics-card rating">
+                <div class="analytics-label">⭐ Average rating</div>
+                <div class="analytics-value"> / 5</div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- GRAPH -->
+    <div class="analytics-chart mb-4">
+
+        <div class="chart-title">Thoughts over time</div>
+
+        <canvas id="thoughtChart"></canvas>
+
+    </div>
+
+
+    <!-- INSIGHTS -->
+    <div class="analytics-insights">
+
+        <div class="insight-title">Insights</div>
+
+        <ul>
+            <li>📈 You reflect the most on <strong><%= mostUsedTheme %></strong> lately.</li>
+
+            <li>🙂 Your mood trend is improving compared to last week.</li>
+
+            <li>📅 Your most consistent day is <strong></strong>.</li>
+        </ul>
+
+    </div>
 
 </div>
 
-<h2>Your Patterns</h2>
-
-<div class="insights">
-
-<div class="insight-card">
-<h3>💡 Most Explored Theme</h3>
-<p><%= mostUsedTheme %></p>
-</div>
-
-<div class="insight-card">
-<h3>😊 Most Common Mood</h3>
-<p><%= mostCommonMood %></p>
-</div>
-
-<div class="insight-card">
-<h3>🎧 Top Learning Source</h3>
-<p><%= topSource %></p>
-</div>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

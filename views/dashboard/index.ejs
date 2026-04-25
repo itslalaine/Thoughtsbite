@@ -1,12 +1,93 @@
+<style>
+  /* LIMIT TEXT INSIDE CARD */
+.custom-card p {
+    font-size: 28px; /* ↓ reduced from 32px (this was the main issue) */
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* LIMIT TO 4 LINES */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-card h5 {
+    font-size: 26px; /* from 36px */
+}
+
+.custom-card.square {
+    font-size: 32px;
+    line-height: 1.45;
+    margin: 0;
+    font-weight: 375;
+    /* font-family: 'Quicksand', sans-serif; */
+}
+
+
+  .carousel-item {
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  }
+
+  .custom-card {
+    text-align: center;
+    padding: 25px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .custom-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  }
+
+  .custom-card:hover p {
+    -webkit-line-clamp: unset;
+}
+
+.peach { background: #41afa4 !important; }
+.mint { background: #a7c7e7 !important; }
+.lavender { background: #f67f6b !important; }
+.softyellow { background: #FFF2A9 !important; }
+.powderblue { background: #C8DFF5 !important; }
+.sage { background: #B2D8B2 !important; }
+
+.btn-activity {
+    background: transparent;
+    border: none;
+    color: #4cae65;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.btn-activity:hover {
+    color: #2e7d32;
+    text-decoration: underline;
+}
+
+</style>
 <!-- HERO -->
 <div class="container text-center mt-lg- mt-md-4 mt-3 pt-5">
     <h1 class="phrase">A space for your <br> thoughts</h1>
     <div class="mt-5 gap-4 d-flex justify-content-center flex-wrap">
-        <span class="custom-badge streak"><i class="bi bi-lightning-fill me-1"></i>3-day streak</span>
-        <span class="custom-badge mindset"><i class="bi bi-lightbulb me-1"></i>Mindset</span>
-        <span class="custom-badge thoughts"><i class="bi bi-journal-text me-1"></i>5 thoughts this week</span>
-    </div>
+        <span class="custom-badge streak">
+        <i class="bi bi-lightning-fill me-1"></i>
+        <%= streak %>-day streak
+        </span>
 
+        <span class="custom-badge mindset">
+        <i class="bi bi-lightbulb me-1"></i>
+        <%= mostUsedTheme %>
+        </span>
+
+        <span class="custom-badge thoughts">
+        <i class="bi bi-journal-text me-1"></i>
+        <%= thoughtsThisWeek %> thoughts this week
+        </span>
+    </div>
 </div>
 
 <!-- RECENT THOUGHTS -->
@@ -14,81 +95,99 @@
     <h1>Recently Captured</h1>
     <p class="sub-phrase mb-5">A quick look at your latest insights</p>
     <div id="thoughtCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
+<div id="thoughtCarousel"
+     class="carousel slide carousel-fade"
+     data-bs-ride="carousel"
+     data-bs-interval="4000"
+     data-bs-pause="hover">
 
-            <!-- Slide Group 1 -->
-            <div class="carousel-item active">
-                <div class="container">
-                    <div class="row g-4">
+  <div class="carousel-inner">
+<div class="carousel-inner">
 
-                        <!-- CARD 1 -->
-                        <div class="col-md-4">
-                            <div class="custom-card square peach">
-                                <h5 class="fw-bold">Mindset</h5>
-                                <small class="text-muted">Today</small>
-                                <p>Growth starts with doing, not waiting. Progress beats perfection.</p>
-                            </div>
-                        </div>
+  <%
+    const colors = [
+      'mint',
+      'peach',
+      'lavender',
+      'softyellow',
+      'powderblue',
+      'sage' // 6th color
+    ];
 
-                        <!-- CARD 2 -->
-                        <div class="col-md-4">
-                            <div class="custom-card square mint">
-                                <h5 class="fw-bold">Growth</h5>
-                                <small class="text-muted">Yesterday</small>
-                                <p>Small actions compound into results. Consistency wins.</p>
-                            </div>
-                        </div>
+    let globalIndex = 0;
+  %>
 
-                        <!-- CARD 3 -->
-                        <div class="col-md-4">
-                            <div class="custom-card square lavender">
-                                <h5 class="fw-bold">Productivity</h5>
-                                <small class="text-muted">Dec 3, 2025</small>
-                                <p>Focus on one task at a time. Clarity increases output.</p>
-                            </div>
-                        </div>
+  <% thoughtChunks.forEach((chunk, i) => { %>
 
-                    </div>
-                </div>
+    <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+
+      <div class="container">
+
+        <div class="row g-4 <%= chunk.length < 3 ? 'justify-content-center' : '' %>">
+
+          <% chunk.forEach((thought) => { 
+
+               const colorClass = colors[globalIndex % colors.length];
+               globalIndex++;
+
+          %>
+
+            <div class="col-md-4">
+
+              <div class="custom-card square <%= colorClass %>">
+
+                <h5 class="fw-bold">
+                  <%= thought.theme %>
+                </h5>
+
+                <small class="text-muted">
+                  <%= thought.dateLabel %>
+                </small>
+
+                <p class="card-text-limit">
+                  <%= thought.content %>
+                </p>
+
+              </div>
+
             </div>
 
-            <!-- Slide Group 2 -->
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row g-4 justify-content-center">
-
-                        <!-- CARD 4 -->
-                        <div class="col-md-4">
-                            <div class="custom-card square softyellow">
-                                <h5 class="fw-bold">Discipline</h5>
-                                <small class="text-muted">Last Week</small>
-                                <p>Discipline stays when motivation fades. Habits shape your future.</p>
-                            </div>
-                        </div>
-
-                        <!-- CARD 5 -->
-                        <div class="col-md-4">
-                            <div class="custom-card square powderblue">
-                                <h5 class="fw-bold">Creativity</h5>
-                                <small class="text-muted">Nov 20, 2025</small>
-                                <p>Give your mind space and new ideas flow naturally.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+          <% }) %>
 
         </div>
 
+      </div>
+
+    </div>
+
+  <% }) %>
+
+</div>
+
+  </div>
+
+  <!-- DYNAMIC DOTS -->
+  <% if (thoughtChunks.length > 1) { %>
     <div class="carousel-indicators custom-dots">
-        <button type="button" data-bs-target="#thoughtCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#thoughtCarousel" data-bs-slide-to="1"></button>
-    </div>  
+      <% thoughtChunks.forEach((_, i) => { %>
+        <button 
+          type="button"
+          data-bs-target="#thoughtCarousel"
+          data-bs-slide-to="<%= i %>"
+          class="<%= i === 0 ? 'active' : '' %>">
+        </button>
+      <% }) %>
+    </div>
+  <% } %>
+
+</div>
 </div>
 
 </div>
 <div class="text-center m-3 pt-4 pb-5">
-    <button class="btn btn-activity" type="button">View more thoughts</button>
+    <a href="/thoughts" class="btn btn-activity">
+        View more thoughts
+    </a>
 </div>
+
 
