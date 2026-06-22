@@ -1,218 +1,240 @@
 <style>
-.analytics-page {
-    max-width: 850px;
+    .analytics-page {
+    max-width: 900px;
 }
 
-
-/* header */
-
+/* HEADER */
 .analytics-title {
     font-weight: 600;
 }
 
 .analytics-subtitle {
     color: #777;
-    margin-top: -5px;
+    margin-top: 16px;
+    font-size: 24px;
 }
 
+/* STATUS BAR */
+.analytics-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-/* cards */
+    background: #fff;
+    border: 1px solid #eee;
 
-.analytics-card {
+    padding: 12px 18px;
+    border-radius: 999px;
 
-    border-radius: 16px;
-
-    padding: 22px;
-
-    color: #2d2d2d;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-
-    transition: transform .15s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-.analytics-card:hover {
-    transform: translateY(-3px);
-}
-
-
-.analytics-label {
-
+.status-content {
+    display: flex;
+    gap: 10px;
     font-size: 14px;
-
-    opacity: .8;
-
-    margin-bottom: 6px;
 }
 
-
-.analytics-value {
-
-    font-size: 26px;
-
-    font-weight: 600;
+.divider {
+    color: #bbb;
 }
 
-
-.analytics-note {
-
-    font-size: 13px;
-
-    opacity: .7;
-
-    margin-top: 4px;
+.status-icon {
+    color: #999;
 }
 
-
-/* soft colors */
-
-.streak {
-    background: #7FA1C3;
+/* GRID */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
 }
 
-.week {
-    background: #E6CF8B;
+/* LEFT COLUMN */
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
-.theme {
-    background: #6BA292;
+/* RIGHT COLUMN */
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
-.rating {
-    background: #E59B7D;
-}
-
-
-
-/* chart */
-
-.analytics-chart {
-
-    background: white;
-
+/* CARD BASE */
+.card {
+    background: #fff;
+    border-radius: 18px;
     padding: 20px;
+    border: 1px solid #eee;
 
-    border-radius: 16px;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.04);
 }
 
-
-.chart-title {
-
-    font-weight: 600;
-
-    margin-bottom: 15px;
+/* CHART */
+.chart-card {
+    height: 250px;
 }
 
-
-
-/* insights */
-
-.analytics-insights {
-
-    background: white;
-
-    padding: 20px;
-
-    border-radius: 16px;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.insight-title {
-
-    font-weight: 600;
-
+.card-title {
+    font-weight: 500;
     margin-bottom: 10px;
+    color: #333;
 }
 
-.analytics-insights ul {
-
-    padding-left: 18px;
-
-    color: #555;
+/* THEME */
+.theme-card {
+    position: relative;
+    overflow: hidden;
 }
 
-.analytics-insights li {
+.small-label {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 5px;
+}
 
-    margin-bottom: 6px;
+.theme-value {
+    font-size: 28px;
+    font-weight: 600;
+    z-index: 2;
+    position: relative;
+}
+
+.theme-bg {
+    position: absolute;
+    font-size: 80px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.04);
+    bottom: -10px;
+    right: 10px;
+}
+
+/* MOOD */
+.mood-value {
+    font-size: 20px;
+}
+
+.mood-value span {
+    font-size: 14px;
+    color: #777;
+}
+
+/* RIGHT STATS */
+.stat-card {
+    text-align: left;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #777;
 }
 </style>
 <div class="container analytics-page">
 
     <!-- HEADER -->
-    <div class="text-center mb-4">
-        <h2 class="analytics-title">Your Reflection</h2>
-        <p class="analytics-subtitle">A look into your growth patterns.</p>
+    <div class="text-center mb-3">
+        <!-- <h2 class="analytics-title">Thoughts this week</h2> -->
+        <h2 class="analytics-subtitle">your mind, visualized</h2>
     </div>
 
-    <!-- HERO STATS -->
-    <div class="row g-3 mb-4">
+    <!-- STATUS BAR -->
+    <div class="analytics-status mb-4">
+        <div class="status-content">
+            <span>Thought summary for this week: You need to have the right mindset to achieve your goals. Act on them. Be desciplined. Show up no matter what. </span>
+            <!-- <span>🔥day streak</span>
+            <span class="divider">|</span>
+            <span>🙂 calm energy today</span> -->
+        </div>
+        <!-- <div class="status-icon">▾</div> -->
+    </div>
 
-        <div class="col-md-6">
-            <div class="analytics-card streak">
-                <div class="analytics-label">🔥 Current Streak</div>
-                <div class="analytics-value"><%= streak %> days</div>
-                <div class="analytics-note">consistency builds clarity</div>
+    <!-- MAIN GRID -->
+    <div class="analytics-grid">
+
+        <!-- LEFT -->
+        <div class="left">
+
+            <!-- CHART -->
+            <div class="card chart-card">
+                <div class="card-title">thoughts this week</div>
+                <canvas id="thoughtChart">
+                    
+                </canvas>
             </div>
+
+            <!-- THEME -->
+            <div class="card theme-card">
+                <div class="small-label">you’ve been thinking about</div>
+                <div class="theme-value"><%= mostUsedTheme %></div>
+                <!-- <div class="theme-bg"><%= mostUsedTheme %></div> -->
+            </div>
+
+            <!-- MOOD -->
+            <!-- <div class="card mood-card">
+                <div class="small-label">your emotional tone</div>
+                <div class="mood-value">🙂 Calm <span>↗ improving</span></div>
+            </div> -->
+
         </div>
 
-        <div class="col-md-6">
-            <div class="analytics-card week">
-                <div class="analytics-label">💭 Thoughts this month</div>
-                <div class="analytics-value"><%= thoughtsThisMonth %></div>
-                <div class="analytics-note">small reflections matter</div>
+        <!-- RIGHT -->
+        <div class="right">
+
+            <div class="card stat-card">
+                <div>🔥</div>
+                <div class="stat-value"><%= streak %></div>
+                <div class="stat-label">days consistent</div>
             </div>
+
+            <div class="card stat-card">
+                <div>🙂</div>
+                <div class="stat-value"><%= thoughtsThisMonth %></div>
+                <div class="stat-label">thoughts this month</div>
+            </div>
+
+            <div class="card stat-card">
+                <div>⭐</div>
+                <div class="stat-value">4.2</div>
+                <div class="stat-label">avg clarity</div>
+            </div>
+
         </div>
 
     </div>
-
-    <!-- PATTERNS -->
-    <div class="row g-3 mb-4">
-
-        <div class="col-md-6">
-            <div class="analytics-card theme">
-                <div class="analytics-label">🏷 Most used theme</div>
-                <div class="analytics-value"><%= mostUsedTheme %></div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="analytics-card rating">
-                <div class="analytics-label">⭐ Average rating</div>
-                <div class="analytics-value"> / 5</div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- GRAPH -->
-    <div class="analytics-chart mb-4">
-
-        <div class="chart-title">Thoughts over time</div>
-
-        <canvas id="thoughtChart"></canvas>
-
-    </div>
-
-
-    <!-- INSIGHTS -->
-    <div class="analytics-insights">
-
-        <div class="insight-title">Insights</div>
-
-        <ul>
-            <li>📈 You reflect the most on <strong><%= mostUsedTheme %></strong> lately.</li>
-
-            <li>🙂 Your mood trend is improving compared to last week.</li>
-
-            <li>📅 Your most consistent day is <strong></strong>.</li>
-        </ul>
-
-    </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('thoughtChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+        datasets: [{
+            data: [1,2,2,4,6,5,4],
+            borderColor: '#333',
+            borderWidth: 2,
+            pointBackgroundColor: '#333',
+            tension: 0.4
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false } },
+            y: { grid: { color: '#eee' } }
+        }
+    }
+});
+</script>
+
