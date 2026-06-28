@@ -51,12 +51,12 @@
                         <li><a class="dropdown-item nav-link <%= currentPath === '/thoughts/add' ? 'active' : '' %>" href="/thoughts/add">Add Thought</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Analytics</a></li>
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Growth</a></li>
                 <% } %>
                 <% if (user && user.accountType === 'standard') { %>
                 <li class="nav-item"><a class="btn add rounded-pill" href="/thoughts/add" role="button">Add Thought</a></li>  
                 <li class="nav-item"><a class="nav-link <%= currentPath === '/thoughts' ? 'active' : '' %>" href="/thoughts">Thoughts</a></li> 
-                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Analytics</a></li>
+                <li class="nav-item"><a class="nav-link <%= currentPath === '/analytics' ? 'active' : '' %>" href="/analytics">Growth</a></li>
                 <% } %>
                 <% if (user) { %>
                 <li class="nav-item dropdown">
