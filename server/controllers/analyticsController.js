@@ -187,34 +187,34 @@ exports.analyticsPage = async (req, res) => {
 
     const maxMoodCount = Math.max(...Object.values(moodsThisWeek), 1);
 
+    const MAX_MOOD_COUNT = 7;
+
     const moodBars = {};
 
     Object.keys(moodsThisWeek).forEach(mood => {
 
         if (totalMoodCount === 0) {
             moodBars[mood] = 0;
-        } 
-        else {
-
-            const percentage =
-                (moodsThisWeek[mood] / maxMoodCount) * 100;
-
-            moodBars[mood] =
-                moodsThisWeek[mood] === 0
-                    ? 0.5          // minimum width
-                    : Math.round(percentage);
-
+            return;
         }
+
+        const percentage =
+            (moodsThisWeek[mood] / MAX_MOOD_COUNT) * 100;
+
+        moodBars[mood] =
+            moodsThisWeek[mood] === 0
+                ? 0.5
+                : Math.min(Math.round(percentage), 100);
 
     });
 
-    const moodColors = {
-    Motivated: "#4CAF50",
-    Inspired: "#2E8B57",
-    Neutral: "#FBC02D",
-    Confused: "#FF7043",
-    Overwhelmed: "#EF5350"
-    };
+  const moodColors = {
+      Inspired: "#4DB6AC",
+      Motivated: "#66BB6A",
+      Neutral: "#F6C453",
+      Confused: "#F28B74",
+      Overwhelmed: "#A78BFA"
+  };
 
     // ==========================================
     // WEEKLY LINE CHART
@@ -348,7 +348,7 @@ exports.analyticsPage = async (req, res) => {
     }
 
     // ==========================================
-    // CURRENT STREAK (ALL TIME)
+    // CURRENT STREAK
     // ==========================================
 
     // Get all thought dates from the start of this week until today
@@ -377,28 +377,32 @@ exports.analyticsPage = async (req, res) => {
     currentDate.setHours(0, 0, 0, 0);
 
     // Stop once we reach before the start of this week
-    while (currentDate >= startOfWeek) {
-      if (dateSet.has(currentDate.getTime())) {
-        streak++;
-      } else {
-        break;
-      }
+    const weekStart = new Date(startOfWeek);
+    weekStart.setHours(0, 0, 0, 0);
 
-      currentDate.setDate(currentDate.getDate() - 1);
+    while (currentDate.getTime() >= weekStart.getTime()) {
+
+        if (dateSet.has(currentDate.getTime())) {
+            streak++;
+        } else {
+            break;
+        }
+
+        currentDate.setDate(currentDate.getDate() - 1);
     }
 
     let streakMessage = "";
 
     if (streak === 0) {
-      streakMessage = "Start your streak today! 🌱";
+      streakMessage = "Capture a reflection today to begin a new streak.";
     } else if (streak === 1) {
-      streakMessage = "Great start! Keep it going 🔥";
+      streakMessage = "Great start! Keep it going.";
     } else if (streak <= 3) {
-      streakMessage = "You're building momentum 🚀";
+      streakMessage = "You're building momentum!";
     } else if (streak <= 6) {
-      streakMessage = "Amazing consistency! 🌟";
+      streakMessage = "Amazing consistency!";
     } else {
-      streakMessage = "Perfect week! 🎉";
+      streakMessage = "Perfect week!";
     }
 
     const streakLabel = streak === 1 ? "day" : "days";

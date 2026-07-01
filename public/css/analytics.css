@@ -1,0 +1,52 @@
+/* ANALYTICS PAGE */
+.analytics-page {
+    max-width: 1170px;
+}
+
+.analytics-title {
+    font-family: 'Quicksand', sans-serif;
+    margin-top: 16px;
+    font-size: 24px;    
+    font-weight: 700;
+    color: #333;
+    line-height: 1.1;
+}
+
+/* Page Header */
+.analytics-subtitle {
+    font-size: 16px;
+    color: #777;
+}
+
+/* Analytics Cards */
+.analytics-card{
+    background: #fcfcff;
+    border-radius: 16px;
+    border: #5c5c60 3px solid;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    padding:28px;
+    box-shadow:none;
+    transition:.2s ease;
+}
+
+.chart-card {
+    min-height: 300px;
+}
+
+.chart-card canvas {
+    height: 300px !important;
+}
+
+/* Analytics Card Header */
+.card-title,
+.section-title,
+.stat-title,
+.insight-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.section-title {
+    margin-bottom: 20px;
+}

@@ -299,14 +299,16 @@ body {
 /* Add Thought Page */
 .thought-outline {
   max-width: 720px;
-  border: 2.5px solid #333;   /* Soft 2D border */
-  border-radius: 8px;
+  background: #fcfcff;
+  border-radius: 16px;
+  border: #5c5c60 3px solid;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
   padding: 48px;
   background-color: #fff;
 }
 
 .form-control, .form-select {
-  border: 1.8px solid #333;   /* Soft 2D border */
+  border: #5c5c60 1.8px solid;   /* Soft 2D border */
   border-radius: 4px;
 }
 
@@ -333,7 +335,30 @@ body {
 }
 
 .add-title {
-    font-size: 36px;
+    font-size: 24px;
     font-family: 'Quicksand', sans-serif;
+}
+
+/* THOUGHT LIST PAGE */
+/* THOUGHT PAGE */
+
+/* ANALYTICS PAGE */
+.analytics-page {
+    max-width: 1170px;
+}
+
+.analytics-title {
+    font-family: 'Quicksand', sans-serif;
+    margin-top: 16px;
+    font-size: 24px;    
+    font-weight: 700;
+    color: #333;
+    line-height: 1.1;
+}
+
+/* Page Header */
+.analytics-subtitle {
+    font-size: 16px;
+    color: #777;
 }
 
