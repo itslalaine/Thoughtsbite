@@ -76,6 +76,7 @@ exports.addThought = (req, res) => {
 
 // CREATE THOUGHT
 exports.postThought = async (req, res) => {
+
   const {
     content,
     sourceType,
@@ -83,37 +84,116 @@ exports.postThought = async (req, res) => {
     sourceLink,
     theme,
     mood,
-    impact,
     dateWatched
   } = req.body;
 
-  try {
-    // Basic validation
-    if (!content) {
-      req.flash('error', 'Thought content is required');
-      return res.redirect('/thoughts/add');
+  let errors = {};
+
+  // =========================
+  // Reflection
+  // =========================
+
+  if (!content || content.trim() === "") {
+    errors.content = "Thought content is required.";
+  }
+
+  // =========================
+  // Source Type
+  // =========================
+
+  if (!sourceType || sourceType.trim() === "") {
+    errors.sourceType = "Please select a source type.";
+  }
+
+  // =========================
+  // Source Title
+  // =========================
+
+  if (!sourceTitle || sourceTitle.trim() === "") {
+    errors.sourceTitle = "Source title is required.";
+  }
+
+  // =========================
+  // Source Link (optional)
+  // =========================
+
+  if (sourceLink && sourceLink.trim() !== "") {
+
+    const urlRegex =
+      /^(https?:\/\/)([\w.-]+)\.([a-z]{2,})([/\w .-]*)*\/?$/i;
+
+    if (!urlRegex.test(sourceLink)) {
+      errors.sourceLink = "Please enter a valid URL.";
     }
 
-    await Thought.create({
-      user: req.session.user.id,
-      content,
-      sourceType,
-      sourceTitle,
-      sourceLink,
-      theme,
-      mood,
-      impact,
-      dateWatched
+  }
+
+  // =========================
+  // Theme
+  // =========================
+
+  if (!theme || theme.trim() === "") {
+    errors.theme = "Please select a theme.";
+  }
+
+  // =========================
+  // Mood
+  // =========================
+
+  if (!mood || mood.trim() === "") {
+    errors.mood = "Please select a mood.";
+  }
+
+  // =========================
+  // Date
+  // =========================
+
+  if (!dateWatched) {
+    errors.dateWatched = "Please select a date.";
+  }
+
+  // =========================
+  // Validation Failed
+  // =========================
+
+  if (Object.keys(errors).length > 0) {
+
+    return res.render("thought/add", {
+      title: "New Thought",
+      errors,
+      oldInput: req.body
     });
 
-    req.flash('success', 'Thought added successfully');
-    res.redirect('/thoughts');
+  }
+
+  try {
+
+    await Thought.create({
+
+      user: req.session.user.id,
+
+      content: content.trim(),
+      sourceType: sourceType.trim(),
+      sourceTitle: sourceTitle.trim(),
+      sourceLink: sourceLink ? sourceLink.trim() : "",
+      theme: theme.trim(),
+      mood: mood.trim(),
+      dateWatched
+
+    });
+
+    req.flash("success", "Thought added successfully.");
+    res.redirect("/thoughts");
 
   } catch (error) {
+
     console.error(error);
-    req.flash('error', 'Something went wrong');
-    res.redirect('/thoughts/add');
+
+    req.flash("error", "Something went wrong.");
+    res.redirect("/thoughts/add");
+
   }
+
 };
 
 // VIEW SINGLE THOUGHT

@@ -296,48 +296,6 @@ body {
     /* line-height: 50px; */
 }
 
-/* Add Thought Page */
-.thought-outline {
-  max-width: 720px;
-  background: #fcfcff;
-  border-radius: 16px;
-  border: #5c5c60 3px solid;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  padding: 48px;
-  background-color: #fff;
-}
-
-.form-control, .form-select {
-  border: #5c5c60 1.8px solid;   /* Soft 2D border */
-  border-radius: 4px;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: #21b099;
-  box-shadow: 0 0 5px rgba(33, 176, 153, 0.5);
-}
-
-.submit-thought {
-     background-color: #21b099;
-     color: #fff;
-     border-radius: 8px;
-     padding: 8px;
-     font-size: 16px;
-     font-weight: 500;
-     border: none;
-     transition: 0.2s;
-}
-
-.submit-thought:hover {
-    background-color: #1a8c7a;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.add-title {
-    font-size: 24px;
-    font-family: 'Quicksand', sans-serif;
-}
 
 /* THOUGHT LIST PAGE */
 /* THOUGHT PAGE */
