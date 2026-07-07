@@ -342,23 +342,4 @@ body {
 /* THOUGHT LIST PAGE */
 /* THOUGHT PAGE */
 
-/* ANALYTICS PAGE */
-.analytics-page {
-    max-width: 1170px;
-}
-
-.analytics-title {
-    font-family: 'Quicksand', sans-serif;
-    margin-top: 16px;
-    font-size: 24px;    
-    font-weight: 700;
-    color: #333;
-    line-height: 1.1;
-}
-
-/* Page Header */
-.analytics-subtitle {
-    font-size: 16px;
-    color: #777;
-}
 

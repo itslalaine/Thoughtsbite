@@ -78,7 +78,8 @@ exports.addThought = (req, res) => {
 exports.postThought = async (req, res) => {
   const {
     content,
-    source,
+    sourceType,
+    sourceTitle,
     sourceLink,
     theme,
     mood,
@@ -96,7 +97,8 @@ exports.postThought = async (req, res) => {
     await Thought.create({
       user: req.session.user.id,
       content,
-      source,
+      sourceType,
+      sourceTitle,
       sourceLink,
       theme,
       mood,

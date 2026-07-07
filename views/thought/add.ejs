@@ -1,108 +1,469 @@
-<div class="container my-5" style="max-width: 720px;">
+<style>
+  .thought-card{
+  max-width: 720px;
+  background: #fcfcff;
+  border-radius: 20px;
+  border: #5c5c60 3px solid;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  padding: 48px;
+  background-color: #fff;
+}
 
-  <div class="thought-outline mx-auto">
-    <!-- Page Title -->
-    <div class="text-center mb-5">
-      <h2 class="add-title fw-bold">New Thought</h2>
-      <p class="text-muted">Capture what resonated with you today</p>
+.page-title{
+    /* font-size:2.3rem; */
+    font-weight:700;
+    font-size: 26px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.page-subtitle{
+    color:#666;
+    margin-top:6px;
+}
+
+.form-section{
+    margin-bottom:10px;
+}
+
+.section-header{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    margin-bottom:20px;
+}
+
+.section-icon{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:#EAF7F1;
+    color:#3CB88E;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.section-title{
+    font-weight:700;
+    margin-bottom:2px;
+}
+
+.section-subtitle{
+    color:#777;
+    margin:0;
+}
+
+.section-divider{
+    margin:28px 0;
+    border-top:2px dashed #4f4f4f;
+}
+
+.thought-textarea{
+    min-height:220px;
+    resize:vertical;
+    border-radius:12px;
+    padding:16px;
+}
+
+.form-control,
+.form-select{
+  border: #5c5c60 1.8px solid;   /* Soft 2D border */
+  border-radius: 12px;
+}
+
+.form-label{
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.optional{
+    color:#999;
+    font-weight:400;
+}
+
+.btn-save{
+     background-color: #21b099;
+     color: #fff;
+     border-radius: 12px;
+     padding: 8px;
+     font-size: 16px;
+     font-weight: 500;
+     border: none;
+     transition: 0.2s;
+}
+
+.btn-save:hover{
+    background:#289c89;
+}
+
+.btn-outline-secondary{
+    border-radius: 12px;
+    padding: 8px;
+}
+</style>
+<div class="container add-thought-page py-5" style="min-height: 100vh; max-width: 900px;">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card thought-card">
+
+                <!-- Header -->
+
+                <div class="text-center mb-3">
+
+                    <h2 class="page-title">
+                        New Thought
+                    </h2>
+
+                    <p class="page-subtitle">
+                        Capture what resonated with you today
+                    </p>
+
+                </div>
+
+                <form action="/thoughts/add" method="POST">
+
+                    <!-- ========================= -->
+                    <!-- Reflection -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+
+                            <!-- <div class="section-icon">
+                                <i class="bi bi-pencil"></i>
+                            </div> -->
+
+                            <div>
+
+                                <h5 class="section-title">
+                                    What stood out to you?
+                                </h5>
+
+                                <p class="section-subtitle">
+                                    Capture the lesson, insight, or reminder you want to revisit.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <textarea
+                            class="form-control thought-textarea"
+                            name="content"
+                            rows="6"
+                            maxlength="1000"
+                            placeholder="Write your thoughts here..."
+                            required></textarea>
+
+                    </div>
+
+
+                    <hr class="section-divider">
+                    <!-- ========================= -->
+                    <!-- Source -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+
+                            <!-- <div class="section-icon">
+                                <i class="bi bi-book"></i>
+                            </div> -->
+
+                            <div>
+
+                                <h5 class="section-title">
+                                    Source details
+                                </h5>
+
+                                <!-- <p class="section-subtitle">
+                                    Select the source of your reflection.
+                                </p> -->
+
+                            </div>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-5">
+
+                                <label class="form-label">
+
+                                    Source Type
+
+                                </label>
+
+                                <select
+                                    class="form-select"
+                                    name="sourceType"
+                                    id="source"
+                                    required>
+                                    <option value="">Select source</option>
+                                    <option value="Book"> Book</option>
+                                    <option value="Video"> Video</option>
+                                    <option value="Podcast"> Podcast</option>
+                                    <option value="Article"> Article / Blog</option>
+                                    <option value="Course"> Course</option>
+                                    <option value="Movie"> Movie / Documentary</option>
+                                    <option value="Conversation"> Conversation</option>
+                                    <option value="Social Media"> Social Media</option>
+                                    <option value="Other"> Other</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-7">
+
+                                <label class="form-label" id="sourceTitleLabel">
+
+                                    Title / Episode / Name
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="sourceTitle"
+                                    placeholder="Atomic Habits, Episode 12, etc.">
+
+                            </div>
+
+                        </div>
+
+                        <div class="mt-3">
+
+                            <label class="form-label">
+
+                                Source Link
+                                <span class="optional">(optional)</span>
+
+                            </label>
+
+                            <input
+                                type="url"
+                                class="form-control"
+                                name="sourceLink"
+                                placeholder="https://...">
+
+                        </div>
+                                <p class="section-subtitle mt-1">
+                                    Add link so you can revisit the source later.
+                                </p>
+                    </div>
+
+
+                    <hr class="section-divider">
+
+
+                    <!-- ========================= -->
+                    <!-- Reflection Details -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+<!-- 
+                            <div class="section-icon">
+                                <i class="bi bi-stars"></i>
+                            </div> -->
+
+                            <div>
+
+                                <h5 class="section-title">
+                                    Reflection details
+                                </h5>
+
+                                <!-- <p class="section-subtitle">
+                                    How did this reflection make you feel?
+                                </p> -->
+
+                            </div>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Theme
+
+                                </label>
+
+                                <select
+                                    class="form-select"
+                                    name="theme"
+                                    required>
+
+                                    <option value="">
+                                        Select theme
+                                    </option>
+                                    <option value="Mindset">Mindset</option>
+                                    <option value="Growth">Growth</option>
+                                    <option value="Productivity">Productivity</option>
+                                    <option value="Discipline">Discipline</option>
+                                    <option value="Life">Life</option>
+                                    <option value="Other">Other</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Mood
+
+                                </label>
+
+                                <select
+                                    class="form-select"
+                                    name="mood"
+                                    required>
+
+                                    <option value="">
+                                        Select mood
+                                    </option>
+                                    <option value="inspired">
+                                        Inspired
+                                    </option>
+                                    <option value="motivated">
+                                        Motivated
+                                    </option>
+                                    <option value="neutral">
+                                        Neutral
+                                    </option>
+                                    <option value="confused">
+                                        Confused
+                                    </option>  
+                                    <option value="overwhelmed">
+                                        Overwhelmed
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Reflection Date
+
+                                </label>
+
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    name="dateWatched"
+                                    required>
+
+                            </div>
+                                <p class="section-subtitle mt-1">
+                                    When did you encounter this reflection?
+                                </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================= -->
+                    <!-- Buttons -->
+                    <!-- ========================= -->
+
+                    <div class="mt-5">
+
+                        <button
+                            class="btn btn-success btn-save w-100">
+
+                            <i class="bi bi-floppy me-2"></i>
+
+                            Keep this thought
+
+                        </button>
+
+                        <a
+                            href="/thoughts"
+                            class="btn btn-outline-secondary w-100 mt-3">
+
+                            <i class="bi bi-arrow-left me-2"></i>
+
+                            Change my mind
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <form method="POST" action="/thoughts/add" class="my-3">
-
-      <!-- Thought Content -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">What stood out to you?</label>
-        <textarea
-          class="form-control"
-          rows="5"
-          placeholder="Write the key idea or lesson you want to remember..."
-          name="content"
-          required></textarea>
-      </div>
-
-      <!-- Source -->
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Source</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Book, video, podcast, article title"
-          name="source">
-      </div>
-
-      <!-- Source Link -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">
-          Source Link <span class="text-muted">(optional)</span>
-        </label>
-        <input
-          type="url"
-          class="form-control"
-          placeholder="https://youtube.com/..."
-          name="sourceLink">
-      </div>
-
-      <!-- Theme / Mood / Impact -->
-      <div class="row g-3 mb-4">
-
-        <!-- Theme -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Theme</label>
-          <select class="form-select" name="theme">
-            <option value="">Select</option>
-            <option value="Mindset">Mindset</option>
-            <option value="Growth">Growth</option>
-            <option value="Productivity">Productivity</option>
-            <option value="Discipline">Discipline</option>
-            <option value="Life">Life</option>
-          </select>
-        </div>
-
-        <!-- Mood -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Mood</label>
-          <select class="form-select" name="mood">
-            <option value="">Select</option>
-            <option value="motivated">😊 Motivated</option>
-            <option value="neutral">😐 Neutral</option>
-            <option value="confused">😔 Confused</option>
-            <option value="inspired">🔥 Inspired</option>
-            <option value="overwhelmed">😰 Overwhelmed</option>
-          </select>
-        </div>
-
-        <!-- Impact -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Impact</label>
-          <select class="form-select" name="impact">
-            <option value="">Select</option>
-            <option value="low">⭐ Low</option>
-            <option value="medium">⭐⭐ Medium</option>
-            <option value="high">⭐⭐⭐ High</option>
-          </select>
-        </div>
-
-      </div>
-
-      <!-- Date Watched -->
-      <div class="mb-5">
-        <label class="form-label fw-semibold">Date Watched</label>
-        <input
-          type="date"
-          class="form-control"
-          name="dateWatched">
-      </div>
-
-      <!-- Submit Buttons -->
-      <div class="d-grid gap-2 mt-4">
-        <button type="submit" class="submit-thought btn">
-          Keep this thought
-        </button>
-        <a href="/thoughts" class="cancel-thought btn btn-outline-secondary mt-2">
-          Change my mind
-        </a>
-      </div>
-
-    </form>
-  </div>
 </div>
+
+<script>
+const sourceType = document.getElementById("source");
+const sourceLabel = document.getElementById("sourceTitleLabel");
+
+const labels = {
+    Book: "Book Title",
+    Video: "Video Title",
+    Podcast: "Episode Title",
+    "Article": "Article Title",
+    Course: "Course Name",
+    "Movie": "Movie Title",
+    Conversation: "Who or what was it about?",
+    "Social Media": "Post / Creator",
+    Other: "Title / Name"
+};
+
+sourceType.addEventListener("change", function () {
+
+    sourceLabel.textContent =
+        labels[this.value] || "Title / Episode / Name";
+
+});
+
+const sourceInput = document.querySelector('input[name="sourceTitle"]');
+
+const placeholders = {
+    Book: "e.g. Atomic Habits",
+    Video: "e.g. How to Build Better Habits",
+    Podcast: "e.g. The Diary of a CEO - Episode 302",
+    Article: "e.g. The Power of Tiny Habits",
+    Course: "e.g. CS50: Introduction to Computer Science",
+    Movie: "e.g. The Pursuit of Happiness",
+    Conversation: "e.g. Conversation with myself lol",
+    "Social Media": "e.g. James Clear Instagram Post",
+    Other: "Enter title"
+};
+
+sourceType.addEventListener("change", function () {
+
+    sourceLabel.textContent =
+        labels[this.value] || "Title / Episode / Name";
+
+    sourceInput.placeholder =
+        placeholders[this.value] || "Enter title";
+
+});
+</script>

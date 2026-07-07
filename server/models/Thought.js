@@ -15,14 +15,17 @@ const ThoughtSchema = new mongoose.Schema(
       maxlength: 2000
     },
 
-    source: {
+    sourceType: {
       type: String,
-    //   enum: ['youtube', 'book', 'podcast', 'course', 'article', 'other'],
-    //   default: 'other'
-    trim: true
+      trim: true
     },
 
     sourceLink: {
+      type: String,
+      trim: true
+    },
+    
+    sourceTitle: {
       type: String,
       trim: true
     },
@@ -37,12 +40,11 @@ const ThoughtSchema = new mongoose.Schema(
       enum: ['motivated', 'neutral', 'confused', 'inspired', 'overwhelmed'],
       default: 'neutral'
     },
-
-    impact: {
-      type: String,
-      enum: ['low', 'medium', 'high'],
-      default: 'medium'
-    },
+    // impact: {
+    //   type: String,
+    //   enum: ['low', 'medium', 'high'],
+    //   default: 'medium'
+    // },
     dateWatched: {
       type: Date
     },

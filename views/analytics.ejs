@@ -25,10 +25,10 @@
                 <div class="card-title">
 
                     <%= thoughtsThisWeek === 0
-                    ? "No reflections captured this week"
+                    ? "No thoughts captured this week"
                     : thoughtsThisWeek === 1
-                    ? "You captured 1 reflection this week"
-                    : `You captured ${thoughtsThisWeek} reflections this week`
+                    ? "You captured 1 thought this week"
+                    : `You captured ${thoughtsThisWeek} thoughts this week`
                     %>
 
                 </div>
@@ -219,6 +219,32 @@
 
                 </div>
 
+                <!-- Confused -->
+
+                <div class="insight-item">
+
+                    <div class="insight-header">
+
+                        <div class="mood-name">
+                            <i class="bi bi-emoji-tear emoji"></i>
+                            <span>Confused</span>
+                        </div>
+
+                        <span><%= moodsThisWeek.Confused %></span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div class="progress-bar"
+                            style="width:<%= moodBars.Confused %>%;
+                            background:<%= moodColors.Confused %>">
+                        </div>
+
+                    </div>
+
+                </div>
+
                 <!-- Overwhelmed -->
 
                 <div class="insight-item">
@@ -245,31 +271,6 @@
 
                 </div>
 
-                <!-- Confused -->
-
-                <div class="insight-item">
-
-                    <div class="insight-header">
-
-                        <div class="mood-name">
-                            <i class="bi bi-emoji-tear emoji"></i>
-                            <span>Confused</span>
-                        </div>
-
-                        <span><%= moodsThisWeek.Confused %></span>
-
-                    </div>
-
-                    <div class="progress">
-
-                        <div class="progress-bar"
-                            style="width:<%= moodBars.Confused %>%;
-                            background:<%= moodColors.Confused %>">
-                        </div>
-
-                    </div>
-
-                </div>
             <% } %>
 
             </div>
