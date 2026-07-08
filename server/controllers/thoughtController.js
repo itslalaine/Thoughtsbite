@@ -241,39 +241,122 @@ exports.editThoughtPage = async (req, res) => {
     const thought = await Thought.findOne({
       _id: thoughtId,
       isDeleted: false
-    });
+    }).lean();
 
     if (!thought) {
-      return res.status(404).render('404');
+      return res.status(404).render("404");
     }
 
     // Ownership / admin check
     if (
-      req.user.accountType !== 'admin' &&
+      req.user.accountType !== "admin" &&
       thought.user.toString() !== req.user.id
     ) {
-      return res.status(403).render('403', {
-        title: 'Access Denied',
-        description: 'You cannot edit this thought'
+      return res.status(403).render("403", {
+        title: "Access Denied",
+        description: "You cannot edit this thought."
       });
     }
 
-    res.render('thought/edit', {
-      title: 'Edit Thought',
-      description: 'Update your thought',
-      thought
+    thought.dateWatchedFormatted = thought.dateWatched
+      ? new Date(thought.dateWatched).toISOString().split("T")[0]
+      : "";
+
+    res.render("thought/edit", {
+      title: "Edit Thought",
+      description: "Update your thought",
+      thought,
+      errors: {},
+      oldInput: {}
     });
 
   } catch (error) {
     console.error(error);
-    res.redirect('/thoughts');
+    res.redirect("/thoughts");
   }
 };
 
 // UPDATE THOUGHT
 exports.updateThought = async (req, res) => {
+
+  const thoughtId = req.params.id;
+
+  const {
+    content,
+    sourceType,
+    sourceTitle,
+    sourceLink,
+    theme,
+    mood,
+    dateWatched
+  } = req.body;
+
+  let errors = {};
+
+  // =========================
+  // Reflection
+  // =========================
+
+  if (!content || content.trim() === "") {
+    errors.content = "Reflection is required.";
+  }
+
+  // =========================
+  // Source Type
+  // =========================
+
+  if (!sourceType || sourceType.trim() === "") {
+    errors.sourceType = "Please select a source type.";
+  }
+
+  // =========================
+  // Source Title
+  // =========================
+
+  if (!sourceTitle || sourceTitle.trim() === "") {
+    errors.sourceTitle = "Please enter the source title.";
+  }
+
+  // =========================
+  // Source Link (optional)
+  // =========================
+
+  if (sourceLink && sourceLink.trim() !== "") {
+
+    const urlRegex =
+      /^(https?:\/\/)([\w.-]+)\.([a-z]{2,})([/\w .-]*)*\/?$/i;
+
+    if (!urlRegex.test(sourceLink)) {
+      errors.sourceLink = "Please enter a valid URL.";
+    }
+
+  }
+
+  // =========================
+  // Theme
+  // =========================
+
+  if (!theme || theme.trim() === "") {
+    errors.theme = "Please select a theme.";
+  }
+
+  // =========================
+  // Mood
+  // =========================
+
+  if (!mood || mood.trim() === "") {
+    errors.mood = "Please select a mood.";
+  }
+
+  // =========================
+  // Date
+  // =========================
+
+  if (!dateWatched) {
+    errors.dateWatched = "Please select the reflection date.";
+  }
+
   try {
-    const thoughtId = req.params.id;
 
     const thought = await Thought.findOne({
       _id: thoughtId,
@@ -281,35 +364,58 @@ exports.updateThought = async (req, res) => {
     });
 
     if (!thought) {
-      return res.status(404).render('404');
+      return res.status(404).render("404");
     }
 
     // Ownership / admin check
     if (
-      req.user.accountType !== 'admin' &&
+      req.user.accountType !== "admin" &&
       thought.user.toString() !== req.user.id
     ) {
-      return res.status(403).render('403');
+      return res.status(403).render("403");
+    }
+
+    // Validation failed
+    if (Object.keys(errors).length > 0) {
+
+      thought.dateWatchedFormatted = thought.dateWatched
+        ? new Date(thought.dateWatched).toISOString().split("T")[0]
+        : "";
+
+      return res.render("thought/edit", {
+        title: "Edit Thought",
+        description: "Update your thought",
+        thought,
+        errors,
+        oldInput: req.body
+      });
+
     }
 
     await Thought.findByIdAndUpdate(thoughtId, {
-      content: req.body.content,
-      source: req.body.source,
-      sourceLink: req.body.sourceLink,
-      theme: req.body.theme,
-      mood: req.body.mood,
-      impact: req.body.impact,
-      dateWatched: req.body.dateWatched,
-      updatedAt: Date.now()
+
+      content: content.trim(),
+      sourceType: sourceType.trim(),
+      sourceTitle: sourceTitle.trim(),
+      sourceLink: sourceLink ? sourceLink.trim() : "",
+      theme: theme.trim(),
+      mood: mood.trim(),
+      dateWatched,
+      updatedAt: new Date()
+
     });
 
-    req.flash('success', 'Thought updated successfully');
+    req.flash("success", "Thought updated successfully.");
     res.redirect(`/thoughts/${thoughtId}`);
 
   } catch (error) {
+
     console.error(error);
-    res.redirect('/thoughts');
+    req.flash("error", "Something went wrong.");
+    res.redirect("/thoughts");
+
   }
+
 };
 
 exports.deleteThought = async (req, res) => {

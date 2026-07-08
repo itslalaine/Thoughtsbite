@@ -1,108 +1,388 @@
-<div class="container my-5" style="max-width: 720px;">
+<div class="container add-thought-page py-5" style="min-height: 100vh; max-width: 900px;">
 
-  <div class="thought-outline mx-auto">
-    <!-- Page Title -->
-    <div class="text-center mb-5">
-      <h2 class="add-title fw-bold">Edit Thought</h2>
-      <p class="text-muted">Refine or update your reflection</p>
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card thought-card">
+
+                <!-- Header -->
+
+                <div class="text-center mb-3">
+
+                    <h2 class="page-title">
+                        Revisit Your Thought
+                    </h2>
+
+                    <p class="page-subtitle">
+                        Refine your reflection.
+                    </p>
+
+                </div>
+
+                <form method="POST" action="/thoughts/edit/<%= thought._id %>">
+
+                    <!-- ========================= -->
+                    <!-- Reflection -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+                            <div>
+
+                                <h5 class="section-title">
+                                    What stood out to you?
+                                </h5>
+
+                                <p class="section-subtitle">
+                                    Capture the lesson, insight, or reminder you want to revisit.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                          <textarea
+                              class="form-control <%= errors.content ? 'is-invalid' : '' %>"
+                              rows="6"
+                              name="content"
+                              maxlength="1000"><%= oldInput.content || thought.content %></textarea>
+
+                          <% if (errors.content) { %>
+                          <div class="invalid-feedback">
+                              <%= errors.content %>
+                          </div>
+                          <% } %>
+
+                    </div>
+
+
+                    <hr class="section-divider">
+                    <!-- ========================= -->
+                    <!-- Source -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+
+                            <div>
+
+                                <h5 class="section-title">
+                                    Source details
+                                </h5>
+                            </div>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-5">
+
+                                <label class="form-label">
+
+                                    Source Type
+
+                                </label>
+
+                                <select
+                                    class="form-select <%= errors.sourceType ? 'is-invalid' : '' %>"
+                                    name="sourceType"
+                                    id="source">
+
+                                    <option value="">Select source</option>
+
+                                    <% const sourceTypes = [
+                                        "Book",
+                                        "Video",
+                                        "Podcast",
+                                        "Article",
+                                        "Course",
+                                        "Movie",
+                                        "Conversation",
+                                        "Social Media",
+                                        "Other"
+                                    ]; %>
+
+                                    <% sourceTypes.forEach(type => { %>
+
+                                        <option
+                                            value="<%= type %>"
+                                            <%= (oldInput.sourceType || thought.sourceType) === type ? "selected" : "" %>>
+
+                                            <%= type === "Article"
+                                                ? "Article / Blog"
+                                                : type === "Movie"
+                                                ? "Movie / Documentary"
+                                                : type %>
+
+                                        </option>
+
+                                    <% }) %>
+
+                                </select>
+
+                                <% if(errors.sourceType){ %>
+                                <div class="invalid-feedback">
+                                    <%= errors.sourceType %>
+                                </div>
+                                <% } %>
+                            </div>
+
+                            <div class="col-md-7">
+
+                                <label class="form-label" id="sourceTitleLabel">
+
+                                    Title / Episode / Name
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control <%= errors.sourceTitle ? 'is-invalid' : '' %>"
+                                    name="sourceTitle"
+                                    value="<%= oldInput.sourceTitle || thought.sourceTitle || '' %>">
+
+                                <% if(errors.sourceTitle){ %>
+                                <div class="invalid-feedback">
+                                    <%= errors.sourceTitle %>
+                                </div>
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mt-3">
+
+                            <label class="form-label">
+
+                                Source Link
+                                <span class="optional">(optional)</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control <%= errors.sourceLink ? 'is-invalid' : '' %>"
+                                name="sourceLink"
+                                placeholder="https://..."
+                                value="<%= oldInput.sourceLink || thought.sourceLink || '' %>">
+
+                            <% if(errors.sourceLink){ %>
+                            <div class="invalid-feedback">
+                                <%= errors.sourceLink %>
+                            </div>
+                            <% } %>
+
+                        </div>
+                                <p class="section-subtitle mt-1">
+                                    Add link so you can revisit the source later.
+                                </p>
+                    </div>
+
+
+                    <hr class="section-divider">
+
+
+                    <!-- ========================= -->
+                    <!-- Reflection Details -->
+                    <!-- ========================= -->
+
+                    <div class="form-section">
+
+                        <div class="section-header">
+
+                            <div>
+
+                                <h5 class="section-title">
+                                    Reflection details
+                                </h5>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Theme
+
+                                </label>
+
+                                <select
+                                    class="form-select <%= errors.theme ? 'is-invalid' : '' %>"
+                                    name="theme">
+
+                                    <option value="">Select theme</option>
+
+                                    <% const themes = [
+                                        "Mindset",
+                                        "Growth",
+                                        "Productivity",
+                                        "Discipline",
+                                        "Life",
+                                        "Other"
+                                    ]; %>
+
+                                    <% themes.forEach(theme => { %>
+
+                                        <option
+                                            value="<%= theme %>"
+                                            <%= (oldInput.theme || thought.theme) === theme ? "selected" : "" %>>
+
+                                            <%= theme %>
+
+                                        </option>
+
+                                    <% }) %>
+
+                                </select>
+
+                                <% if(errors.theme){ %>
+                                <div class="invalid-feedback">
+                                    <%= errors.theme %>
+                                </div>
+                                <% } %>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Mood
+
+                                </label>
+
+                                <select
+                                    class="form-select <%= errors.mood ? 'is-invalid' : '' %>"
+                                    name="mood">
+
+                                    <option value="">Select mood</option>
+
+                                    <% const moods = [
+                                        "Inspired",
+                                        "Motivated",
+                                        "Neutral",
+                                        "Confused",
+                                        "Overwhelmed"
+                                    ]; %>
+
+                                    <% moods.forEach(mood => { %>
+
+                                        <option
+                                            value="<%= mood.toLowerCase() %>"
+                                            <%= (oldInput.mood || thought.mood) === mood.toLowerCase() ? "selected" : "" %>>
+
+                                            <%= mood %>
+
+                                        </option>
+
+                                    <% }) %>
+
+                                </select>
+
+                                <% if(errors.mood){ %>
+                                <div class="invalid-feedback">
+                                    <%= errors.mood %>
+                                </div>
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+
+                                    Date
+
+                                </label>
+
+                                <input
+                                    type="date"
+                                    class="form-control <%= errors.dateWatched ? 'is-invalid' : '' %>"
+                                    name="dateWatched"
+                                    value="<%= oldInput.dateWatched || thought.dateWatchedFormatted %>">
+
+                                <% if(errors.dateWatched){ %>
+                                <div class="invalid-feedback">
+                                    <%= errors.dateWatched %>
+                                </div>
+                                <% } %>
+
+                            </div>
+                                <p class="section-subtitle mt-1">
+                                    When did you encounter this reflection?
+                                </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ========================= -->
+                    <!-- Buttons -->
+                    <!-- ========================= -->
+
+                    <div class="mt-5">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-save w-100"
+                        id="saveBtn">
+
+                        <span class="btn-text">
+                            <i class="bi bi-floppy me-2"></i>
+                            Save Changes
+                        </span>
+
+                        <span class="spinner-border spinner-border-sm d-none"
+                              id="saveSpinner"></span>
+
+                    </button>
+                        <a
+                            href="/thoughts"
+                            class="btn btn-outline-secondary w-100 mt-3">
+
+                            <i class="bi bi-arrow-left me-2"></i>
+
+                            Change my mind
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <form method="POST" action="/thoughts/edit/<%= thought._id %>" class="my-3">
-
-      <!-- Thought Content -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">What stood out to you?</label>
-        <textarea
-          class="form-control"
-          rows="5"
-          name="content"
-          required
-        ><%= thought.content %></textarea>
-      </div>
-
-      <!-- Source -->
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Source</label>
-        <input
-          type="text"
-          class="form-control"
-          name="source"
-          value="<%= thought.source || '' %>">
-      </div>
-
-      <!-- Source Link -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">
-          Source Link <span class="text-muted">(optional)</span>
-        </label>
-        <input
-          type="url"
-          class="form-control"
-          name="sourceLink"
-          value="<%= thought.sourceLink || '' %>">
-      </div>
-
-      <!-- Theme / Mood / Impact -->
-      <div class="row g-3 mb-4">
-
-        <!-- Theme -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Theme</label>
-          <select class="form-select" name="theme">
-            <option value="">Select</option>
-            <% ['Mindset','Growth','Productivity','Discipline','Life'].forEach(t => { %>
-              <option value="<%= t %>" <%= thought.theme === t ? 'selected' : '' %>>
-                <%= t %>
-              </option>
-            <% }) %>
-          </select>
-        </div>
-
-        <!-- Mood -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Mood</label>
-          <select class="form-select" name="mood">
-            <option value="">Select</option>
-            <option value="motivated" <%= thought.mood === 'motivated' ? 'selected' : '' %>>😊 Motivated</option>
-            <option value="neutral" <%= thought.mood === 'neutral' ? 'selected' : '' %>>😐 Neutral</option>
-            <option value="confused" <%= thought.mood === 'confused' ? 'selected' : '' %>>😔 Confused</option>
-            <option value="inspired" <%= thought.mood === 'inspired' ? 'selected' : '' %>>🔥 Inspired</option>
-            <option value="overwhelmed" <%= thought.mood === 'overwhelmed' ? 'selected' : '' %>>😰 Overwhelmed</option>
-          </select>
-        </div>
-
-        <!-- Impact -->
-        <div class="col-md-4">
-          <label class="form-label fw-semibold">Impact</label>
-          <select class="form-select" name="impact">
-            <option value="">Select</option>
-            <option value="low" <%= thought.impact === 'low' ? 'selected' : '' %>>⭐ Low</option>
-            <option value="medium" <%= thought.impact === 'medium' ? 'selected' : '' %>>⭐⭐ Medium</option>
-            <option value="high" <%= thought.impact === 'high' ? 'selected' : '' %>>⭐⭐⭐ High</option>
-          </select>
-        </div>
-
-      </div>
-
-      <!-- Date Watched -->
-      <div class="mb-5">
-        <label class="form-label fw-semibold">Date Watched</label>
-        <input
-          type="date"
-          class="form-control"
-          name="dateWatched"
-          value="<%= thought.dateWatched?.toISOString().split('T')[0] %>">
-      </div>
-
-      <!-- Submit Buttons -->
-      <div class="d-grid gap-2 mt-4">
-        <button type="submit" class="submit-thought btn">
-          Update Thought
-        </button>
-        <a href="/thoughts" class="cancel-thought btn btn-outline-secondary mt-2">
-          Cancel
-        </a>
-      </div>
-    </form>
-  </div>
 </div>
+
+<script>
+const form = document.querySelector("form");
+const button = document.getElementById("saveBtn");
+const spinner = document.getElementById("saveSpinner");
+const text = button.querySelector(".btn-text");
+
+form.addEventListener("submit", () => {
+
+    button.disabled = true;
+
+    text.classList.add("d-none");
+    spinner.classList.remove("d-none");
+
+});
+</script>
