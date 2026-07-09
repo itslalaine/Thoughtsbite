@@ -20,7 +20,7 @@
 
                 </div>
 
-                <form action="/thoughts/add" method="POST">
+                <form id="addThoughtForm" action="/thoughts/add" method="POST">
 
                     <!-- ========================= -->
                     <!-- Reflection -->
@@ -373,11 +373,25 @@
                     <div class="mt-5">
 
                         <button
-                            class="btn btn-success btn-save w-100">
+                            type="submit"
+                            class="btn btn-success btn-save w-100"
+                            id="saveBtn">
 
-                            <i class="bi bi-floppy me-2"></i>
+                            <span id="saveText">
+                                <i class="bi bi-floppy me-2"></i>
+                                Keep this thought
+                            </span>
 
-                            Keep this thought
+                            <span id="saveLoading" class="d-none">
+
+                                <span
+                                    class="spinner-border spinner-border-sm me-2"
+                                    role="status">
+                                </span>
+
+                                Saving your reflection...
+
+                            </span>
 
                         </button>
 
@@ -447,6 +461,17 @@ sourceType.addEventListener("change", function () {
 
     sourceInput.placeholder =
         placeholders[this.value] || "Enter title";
+
+});
+
+const form = document.getElementById("addThoughtForm");
+
+form.addEventListener("submit", function () {
+
+    document.getElementById("saveBtn").disabled = true;
+
+    document.getElementById("saveText").classList.add("d-none");
+    document.getElementById("saveLoading").classList.remove("d-none");
 
 });
 </script>

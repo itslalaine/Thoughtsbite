@@ -20,7 +20,7 @@
 
                 </div>
 
-                <form method="POST" action="/thoughts/edit/<%= thought._id %>">
+                <form method="POST" action="/thoughts/edit/<%= thought._id %>" id="editThoughtForm">
 
                     <!-- ========================= -->
                     <!-- Reflection -->
@@ -340,13 +340,22 @@
                         class="btn btn-success btn-save w-100"
                         id="saveBtn">
 
-                        <span class="btn-text">
+                        <span id="saveText">
                             <i class="bi bi-floppy me-2"></i>
                             Save Changes
                         </span>
 
-                        <span class="spinner-border spinner-border-sm d-none"
-                              id="saveSpinner"></span>
+                        <span id="saveLoading" class="d-none">
+
+                            <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                                aria-hidden="true">
+                            </span>
+
+                            Saving...
+
+                        </span>
 
                     </button>
                         <a
@@ -372,17 +381,18 @@
 </div>
 
 <script>
-const form = document.querySelector("form");
-const button = document.getElementById("saveBtn");
-const spinner = document.getElementById("saveSpinner");
-const text = button.querySelector(".btn-text");
+const form = document.getElementById("editThoughtForm");
 
-form.addEventListener("submit", () => {
+form.addEventListener("submit", function () {
+
+    const button = document.getElementById("saveBtn");
+    const saveText = document.getElementById("saveText");
+    const saveLoading = document.getElementById("saveLoading");
 
     button.disabled = true;
 
-    text.classList.add("d-none");
-    spinner.classList.remove("d-none");
+    saveText.classList.add("d-none");
+    saveLoading.classList.remove("d-none");
 
 });
 </script>

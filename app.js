@@ -31,9 +31,9 @@ app.set('view engine', 'ejs');
 
 /* -------- GLOBAL LOCALS -------- */
 
-app.use(async (req, res, next) => {
-  res.locals.messages = await req.flash('success');
-  res.locals.errorMessages = await req.flash('error');
+app.use((req, res, next) => {
+  res.locals.messages = req.flash("success");
+  res.locals.errorMessages = req.flash("error");
   next();
 });
 
