@@ -440,7 +440,7 @@ exports.deleteThought = async (req, res) => {
 
     await thought.save();
 
-    req.flash('success', 'Thought deleted');
+    req.flash('success', 'Thought moved to trash.');
     res.redirect('/thoughts');
 
   } catch (error) {

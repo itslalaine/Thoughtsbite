@@ -220,11 +220,10 @@
                 </a>
               </li>
               <li>
-                <form
+              <form
                   action="/thoughts/<%= thought._id %>/delete"
                   method="POST"
-                  onsubmit="return confirm('Delete this thought?');"
-                >
+                  class="deleteThoughtForm">
                   <button class="dropdown-item text-danger">
                     <i class="bi bi-trash me-2"></i>Remove
                   </button>
