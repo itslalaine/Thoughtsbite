@@ -1,160 +1,55 @@
 <style>
-.thought-list-wrapper {
-  /* padding-top: 40px; */
-  padding-bottom: 80px;
+/* Back to top button */
+.back-to-top{
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
 
+    width: 52px;
+    height: 52px;
+
+    border: 3px solid #5c5c60;
+    border-radius: 50%;
+
+    background: #FCFCFD;
+    color: #5c5c60;
+
+    display: none;
+    z-index: 1000;
+
+    transition: all .25s ease;
+    box-shadow: 0 8px 18px rgba(0,0,0,.15);
 }
 
-.thought-list {
-  max-width: 720px;   /* sweet spot for reading */
-  padding-top: 40px; /* space for filter bar */
-}
-
-.thought-item {
-    max-width: 720px; /* adjust size */
-    margin: 0 auto 20px auto; /* center horizontally */
-    padding: 20px;
-    background: #fcfcff;
-    border-radius: 16px;
-    border: #5c5c60 3px solid;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  /* transition: background 0.2s ease, box-shadow 0.2s ease; */
-}
-
-.thought-item:hover {
+.back-to-top:hover{
     background: #fafafa;
     transform: translateY(-3px);
-    transition: 0.25s ease;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
-    transform: translateY(-3px);
-    transition: 0.25s ease;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
-/* Limit snippet to 2 lines */
-.thought-snippet {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.back-to-top i{
+    font-size: 1.2rem;
 }
 
-/* Hide actions until hover (clean list look) */
-.thought-actions {
-  opacity: 0;
-  transition: opacity 0.2s ease;
+.tooltip{
+    --bs-tooltip-bg: #2F3A34;
+    --bs-tooltip-color: #fff;
+    --bs-tooltip-border-radius: 10px;
+    --bs-tooltip-padding-x: .8rem;
+    --bs-tooltip-padding-y: .45rem;
+    --bs-tooltip-font-size: .82rem;
+    --bs-tooltip-opacity: 1;
+}
+.tooltip.bs-tooltip-left .tooltip-arrow::before,
+.tooltip.bs-tooltip-end .tooltip-arrow::before{
+    border-left-color:#2F3A34;
 }
 
-.thought-item:hover .thought-actions {
-  opacity: 1;
+.tooltip.bs-tooltip-top .tooltip-arrow::before{
+    border-top-color:#2F3A34;
 }
 
-.tooltip-inner {
-  background-color: #2f2f2f; /* or your brand dark */
-  color: #fff;
-  font-size: 0.75rem;
-  border-radius: 8px;
-  padding: 6px 10px;
-}
-
-.tooltip.bs-tooltip-top .tooltip-arrow::before {
-  border-top-color: #2f2f2f;
-}
-
-.meta-click {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-}
-
-.meta-click {
-  color: #495057; /* neutral */
-  text-decoration: none;
-  padding-left: 10px;
-  border-left: 3px solid transparent;
-  transition: all 0.2s ease;
-}
-
-/* Hover reveals theme color */
-.meta-click:hover {
-  font-weight: 500;
-}
-
-/* Theme accents */
-.meta-click.theme-life:hover {
-  color: #28a745;
-  border-left-color: #28a745;
-}
-
-.meta-click.theme-mindset:hover {
-  color: #6f42c1;
-  border-left-color: #6f42c1;
-}
-
-.meta-click.theme-growth:hover {
-  color: #fd7e14;
-  border-left-color: #fd7e14;
-}
-
-/* Three-dot button */
-.btn-icon {
-  border: none;
-  background: transparent;
-  padding: 6px 8px;
-  line-height: 1;
-}
-
-.btn-icon i {
-  font-size: 1.3rem; /* makes dots bigger */
-  color: #6c757d;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.btn-icon:hover i {
-  color: #212529;
-  transform: scale(1.1);
-}
-
-/* Remove Bootstrap caret */
-.dropdown-toggle::after {
-  display: none;
-}
-
-/* Dropdown styling */
-.dropdown-menu {
-  border-radius: 12px;
-  padding: 6px;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.dropdown-item {
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-/* When dropdown is shown */
-.dropdown-menu.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.thought-meta-icon {
-  font-size: 1rem;
-  color: #6c757d;
-  transition: color 0.2s ease;
-}
-
-.thought-meta-icon:hover {
-  color: #212529;
-}
-
-.thought-item:focus-within .thought-actions,
-.thought-item:focus-within .dropdown-menu {
-  opacity: 1;
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before{
+    border-bottom-color:#2F3A34;
 }
 </style>
 <div class="thought-list-wrapper">
@@ -183,28 +78,20 @@
 
     <% } else { %>
     <% thoughts.forEach(thought => { %>
-      <div class="thought-item rounded-4 p-3 mb-3 shadow-sm">
+      <div class="thought-item rounded-4 p-3 mb-3 shadow-sm" data-href="/thoughts/<%= thought._id %>">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-start mb-1">
           <div>
-            <h6 class="fw-semibold mb-2">
-              <a
-                href="/thoughts/<%= thought._id %>"
-                class="meta-click theme-<%= thought.theme.toLowerCase() %>"
-              >
+            <h6 class="theme-badge mb-2">
+                <span class="theme-dot theme-<%= thought.theme.toLowerCase() %>"></span>
                 <%= thought.theme %>
-              </a>
             </h6>
-            <small class="text-muted">
-                <%= new Date(thought.dateWatched || thought.createdAt).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric'
-                }) %>
-            </small>
           </div>
           <!-- Three dots menu -->
           <div class="dropdown">
+            <small class="text-muted thought-date me-2">
+              <%= thought.displayDate %>
+            </small>
             <button
               class="btn btn-icon dropdown-toggle"
               type="button"
@@ -234,70 +121,105 @@
         </div>
 
         <!-- Snippet -->
-        <p class="text-muted mt-3 mb-2 thought-snippet">
-          <%= thought.content %>
-        </p>
-
+        <p class="thought-snippet"><%= (thought.content || "").trim() %></p>
         <!-- Tags -->
-        <div class="d-flex flex-wrap gap-2 mt-4 mb-2">
-          <% if (thought.mood) { %>
-            <% if (thought.mood === 'motivated') { %>
-            <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-emoji-smile thought-meta-icon"></i> 
-            </span>
-            <% } %>
-            <% if (thought.mood === 'neutral') { %>
-            <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-emoji-neutral thought-meta-icon"></i>
-            </span>
-            <% } %>
-            <% if (thought.mood === 'confused') { %>
-            <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-question-circle thought-meta-icon"></i>
-            </span>
-            <% } %>
-            <% if (thought.mood === 'inspired') { %>
-            <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-lightbulb thought-meta-icon"></i>
-            </span>
-            <% } %>
-            <% if (thought.mood === 'overwhelmed') { %>
-            <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.mood %>">
-              <i class="bi bi-exclamation-circle thought-meta-icon"></i>
-            </span>
-            <% } %>
-          <% } %>
 
-          <% if (thought.impact) { %>
-            <% if (thought.impact === 'high') { %>
-              <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill thought-meta-icon"></i>
-                <i class="bi bi-star-fill thought-meta-icon"></i>
-                <i class="bi bi-star-fill thought-meta-icon"></i>
-   
+        <hr class="thought-divider">
+
+        <div class="thought-footer">
+
+        <% if (thought.mood) { %>
+
+            <div class="thought-meta">
+
+                <% if (thought.mood === "motivated") { %>
+                    <i class="bi bi-emoji-heart-eyes emoji"></i>
+                <% } %>
+
+                <% if (thought.mood === "neutral") { %>
+                    <i class="bi bi-emoji-expressionless emoji"></i>
+                <% } %>
+
+                <% if (thought.mood === "confused") { %>
+                    <i class="bi bi-emoji-tear emoji"></i>
+                <% } %>
+
+                <% if (thought.mood === "inspired") { %>
+                    <i class="bi bi-emoji-laughing emoji"></i>
+                <% } %>
+
+                <% if (thought.mood === "overwhelmed") { %>
+                    <i class="bi bi-emoji-dizzy emoji"></i>
+                <% } %>
+
+                <span><%= thought.mood.charAt(0).toUpperCase() + thought.mood.slice(1) %></span>
+
+            </div>
+
+        <% } %>
+
+        <% if (thought.sourceType) { %>
+
+          <div class="thought-meta">
+
+              <% if (thought.sourceType === "Book") { %>
+                  <i class="bi bi-book-half"></i>
+
+              <% } else if (thought.sourceType === "Video") { %>
+                  <i class="bi bi-play-circle-fill"></i>
+
+              <% } else if (thought.sourceType === "Podcast") { %>
+                  <i class="bi bi-mic-fill"></i>
+
+              <% } else if (thought.sourceType === "Article") { %>
+                  <i class="bi bi-newspaper"></i>
+
+              <% } else if (thought.sourceType === "Course") { %>
+                  <i class="bi bi-mortarboard-fill"></i>
+
+              <% } else if (thought.sourceType === "Movie") { %>
+                  <i class="bi bi-camera-reels-fill"></i>
+
+              <% } else if (thought.sourceType === "Conversation") { %>
+                  <i class="bi bi-chat-dots-fill"></i>
+
+              <% } else if (thought.sourceType === "Social Media") { %>
+                  <i class="bi bi-instagram"></i>
+
+              <% } else { %>
+                  <i class="bi bi-archive-fill"></i>
+              <% } %>
+
+              <span>
+                  <% if (thought.sourceType === "Article") { %>
+                      Article / Blog
+                  <% } else if (thought.sourceType === "Movie") { %>
+                      Movie / Documentary
+                  <% } else { %>
+                      <%= thought.sourceType %>
+                  <% } %>
               </span>
-            <% } %>
-            <% if (thought.impact === 'medium') { %>
-              <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill thought-meta-icon"></i>
-                <i class="bi bi-star-fill thought-meta-icon"></i>   
-              </span>
-            <% } %>
-            <% if (thought.impact === 'low') { %>
-              <span class="text-muted small" data-bs-toggle="tooltip" data-bs-placement="top" title="<%= thought.impact %>">
-                <i class="bi bi-star-fill thought-meta-icon"></i>
-              </span>
-            <% } %>
-          <% } %>
+
+          </div>
+
+        <% } %>
+
         </div>
       </div>
     <% }) %>
     <% } %>
   </div>
 </div>
+<!-- Back to Top -->
+<button id="backToTop" class="back-to-top me-md-3" data-bs-toggle="tooltip" data-bs-placement="left" title="Back to top">
+    <i class="bi bi-chevron-up"></i>
+</button>
+
 <script>
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-  const tooltipList = [...tooltipTriggerList].map(
-    tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl)
-  );
+
+  tooltipTriggerList.forEach(el => {
+      new bootstrap.Tooltip(el);
+  });
+
 </script>

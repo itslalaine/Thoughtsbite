@@ -80,3 +80,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 });
+
+// list
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.querySelectorAll(".thought-item").forEach(card => {
+
+        card.addEventListener("click", function (e) {
+
+            // Ignore clicks on dropdown menu or buttons
+            if (e.target.closest("a, button, form, .dropdown")) return;
+
+            window.location.href = this.dataset.href;
+
+        });
+
+    });
+
+
+    const backToTop = document.getElementById("backToTop");
+
+    if(backToTop){
+
+    window.addEventListener("scroll", () => {
+
+        if(window.scrollY > 500){
+            backToTop.style.display = "block";
+        }else{
+            backToTop.style.display = "none";
+        }
+
+    });
+
+    backToTop.addEventListener("click", () => {
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    });
+
+}
+
+});

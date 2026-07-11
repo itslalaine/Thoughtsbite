@@ -81,7 +81,7 @@
 
       <select name="theme" class="form-select form-select-sm">
         <option value="">Theme</option>
-        <% ['Mindset','Growth','Productivity','Discipline','Life'].forEach(t => { %>
+        <% ['Mindset','Growth','Productivity','Discipline','Life', 'Other'].forEach(t => { %>
           <option value="<%= t %>" <%= query?.theme === t ? 'selected' : '' %>>
             <%= t %>
           </option>

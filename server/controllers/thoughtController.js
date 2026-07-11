@@ -1,6 +1,32 @@
 const Thought = require('../models/Thought');
 const User = require('../models/User');
 
+// ==========================================
+// FORMAT THOUGHT DATE
+// ==========================================
+
+function formatThoughtDate(date) {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const thoughtDate = new Date(date);
+    thoughtDate.setHours(0, 0, 0, 0);
+
+    const diff = Math.floor(
+        (today - thoughtDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
+    if (diff < 7) return `${diff} days ago`;
+
+    return thoughtDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    });
+}
 
 // LIST THOUGHTS (PRIVATE)
 exports.thoughtPage = async (req, res) => {
@@ -20,7 +46,7 @@ exports.thoughtPage = async (req, res) => {
         { theme: { $regex: search, $options: 'i' } },
         { mood: { $regex: search, $options: 'i' } },
         { impact: { $regex: search, $options: 'i' } },
-        { source: { $regex: search, $options: 'i' } }
+        { sourceType: { $regex: search, $options: 'i' } }
       ];
     }
 
@@ -44,7 +70,17 @@ exports.thoughtPage = async (req, res) => {
       sortOption = { dateWatched: 1, createdAt: 1 };
     }
 
-    const thoughts = await Thought.find(query).sort(sortOption);
+    const thoughts = await Thought.find(query)
+    .sort(sortOption)
+    .lean();
+
+    thoughts.forEach(thought => {
+
+      thought.displayDate = formatThoughtDate(
+        thought.dateWatched || thought.createdAt
+      );
+
+    });
 
     res.render('thought/list', {
       title: 'Thoughts',
