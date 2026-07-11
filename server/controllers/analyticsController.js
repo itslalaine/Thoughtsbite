@@ -351,7 +351,7 @@ exports.analyticsPage = async (req, res) => {
     // CURRENT STREAK
     // ==========================================
 
-    // Get all thought dates from the start of this week until today
+    // Get all reflections created this week
     const streakThoughts = await Thought.find({
       user: userId,
       isDeleted: false,
@@ -361,7 +361,7 @@ exports.analyticsPage = async (req, res) => {
       }
     }).select("createdAt");
 
-    // Store unique dates only (ignore multiple thoughts on the same day)
+    // Store unique reflection dates
     const dateSet = new Set();
 
     streakThoughts.forEach(thought => {
@@ -370,31 +370,47 @@ exports.analyticsPage = async (req, res) => {
       dateSet.add(date.getTime());
     });
 
-    // Calculate current streak (today backwards)
-    let streak = 0;
+    // Today's date
+    const today = new Date(now);
+    today.setHours(0, 0, 0, 0);
 
-    let currentDate = new Date(now);
-    currentDate.setHours(0, 0, 0, 0);
-
-    // Stop once we reach before the start of this week
+    // Start of the current week
     const weekStart = new Date(startOfWeek);
     weekStart.setHours(0, 0, 0, 0);
 
+    // Check if user has reflected today
+    const hasThoughtToday = dateSet.has(today.getTime());
+
+    // Start counting from today if there's a reflection,
+    // otherwise start from yesterday.
+    let currentDate = new Date(today);
+
+    if (!hasThoughtToday) {
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
+
+    let streak = 0;
+
+    // Count consecutive days backwards
     while (currentDate.getTime() >= weekStart.getTime()) {
 
-        if (dateSet.has(currentDate.getTime())) {
-            streak++;
-        } else {
-            break;
-        }
+      if (dateSet.has(currentDate.getTime())) {
+        streak++;
+      } else {
+        break;
+      }
 
-        currentDate.setDate(currentDate.getDate() - 1);
+      currentDate.setDate(currentDate.getDate() - 1);
     }
+
+    // ==========================================
+    // STREAK MESSAGE
+    // ==========================================
 
     let streakMessage = "";
 
     if (streak === 0) {
-      streakMessage = "Capture a reflection today to begin a new streak.";
+      streakMessage = "Ready for a fresh start? Reflect today.";
     } else if (streak === 1) {
       streakMessage = "Great start! Keep it going.";
     } else if (streak <= 3) {
