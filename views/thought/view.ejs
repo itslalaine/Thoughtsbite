@@ -1,231 +1,415 @@
 <style>
-.thought-card {
-  border: 2px solid #2e2e3a;
-  border-radius: 18px;
-  padding: 20px;
-  background: #fff;
-  max-width: 720px;
+.thought-details-wrapper{
+    width:100%;
+    max-width:720px;
+    margin:42px auto 80px;
+    padding:0 20px;
 }
 
-/* Header */
-.thought-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#5c5c60;
+    text-decoration:none;
+    margin-bottom:24px;
+    font-weight:500;
 }
 
-.thought-meta {
-  display: flex;
-  gap: 12px;
+.back-link:hover{
+    color:#1f1f1f;
 }
 
-.theme-indicator {
-  width: 4px;
-  border-radius: 4px;
-  background: #ff7a00; /* theme color later */
+.thought-card{
+    background:#fcfcff;
+    border:3px solid #5c5c60;
+    border-radius:22px;
+    padding:40px;
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
-.thought-theme {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+.thought-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:30px;
 }
 
-.thought-date {
-  font-size: 0.85rem;
-  color: #777;
+.theme-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    /* padding: 6px 12px; */
+    border-radius: 999px;
+    background: #f8f9fa;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #343a40;
 }
 
-/* Content */
-.thought-content {
-  margin: 16px 0 20px;
-  color: #444;
-  line-height: 1.6;
+.theme-badge::before{
+    content:"";
+    width:16px;
+    height:16px;
+    border-radius:50%;
 }
 
-/* Footer */
-.thought-footer {
-  display: flex;
-  gap: 20px;
-  color: #555;
+/* only the dot colors */
+.theme-productivity::before{ background:#6FC3D6; }
+.theme-growth::before{ background:#8BCF9B; }
+.theme-mindset::before{ background:#B69AE8; }
+.theme-discipline::before{ background:#F6B26B; }
+.theme-life::before{ background:#F5D76E; }
+.theme-other::before{ background:#C8C8C8; }
+
+.thought-date{
+    margin-top:10px;
+    color:#7c7c82;
+    display:flex;
+    gap:8px;
+    align-items:center;
 }
 
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.header-actions{
+    display:flex;
+    gap:12px;
 }
 
-/* Three dots button */
-.icon-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #555;
+.btn-action{
+    border:none;
+    background:none;
+    text-decoration:none;
+    color:#5c5c60;
+    font-weight:500;
 }
 
-.icon-btn:focus {
-  outline: 2px solid #4caf50;
-  border-radius: 8px;
+.btn-edit:hover{
+    color:#111;
 }
 
-/* Dropdown */
-.dropdown {
-  position: relative;
+.btn-delete{
+    color:#d97c7c;
 }
 
-.dropdown-menu {
-  position: absolute;
-  top: 36px;
-  right: 0;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  padding: 8px;
-  min-width: 140px;
-
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
-  transition: all 0.2s ease;
+.btn-delete:hover{
+    color:#ee4949;
 }
 
-.dropdown.open .dropdown-menu {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+.thought-content{
+    margin:26px 0;
+    font-size:1rem;
+    line-height:2;
+    white-space:pre-wrap;
+    color:#343434;
 }
 
-.dropdown-menu a,
-.dropdown-menu button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  width: 100%;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  cursor: pointer;
+.thought-meta{
+
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+
+    gap:40px;
+
+    margin:35px 0;
+
+    padding-top:25px;
+
+    border-top:1px solid #ECECEC;
+
 }
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
-  background: #f4f4f6;
+.meta-title{
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+    color:#8d8d92;
+
+    text-transform:uppercase;
+
+    letter-spacing:.05em;
+
+    margin-bottom:8px;
+
 }
 
-.dropdown-menu .danger {
-  color: #d32f2f;
+.meta-value{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#8d8d92;
+
+    font-size:.95rem;
+
 }
 
-.btn-icon {
-  border: none;
-  background: transparent;
-  padding: 6px 8px;
-  line-height: 1;
+.meta-value i{
+
+    color:#6c757d;
+
 }
 
-.btn-icon i {
-  font-size: 1.3rem; /* makes dots bigger */
-  color: #6c757d;
-  transition: color 0.2s ease, transform 0.2s ease;
+.meta-value a{
+
+    color:#2f2f2f;
+
+    text-decoration:none;
+
 }
 
-.btn-icon:hover i {
-  color: #212529;
-  transform: scale(1.1);
+.meta-value a:hover{
+
+    color:#16A085;
+
 }
 
-/* Remove Bootstrap caret */
-.dropdown-toggle::after {
-  display: none;
+@media (max-width:768px){
+
+    .thought-meta{
+
+        grid-template-columns:1fr;
+
+        gap:24px;
+
+    }
+
+}
+
+.thought-divider{
+    border: 0;
+    border-top: 1px solid #ECECEC;
+    margin: 2.5rem 0 1.2rem;
+}
+
+.reflection-footer{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .55rem;
+
+    font-size: .82rem;
+    color: #9AA0A6;
+
+    user-select: none;
+}
+
+.footer-separator{
+    color: #D1D5DB;
 }
 
 </style>
+<div class="thought-details-wrapper">
 
-<div class="container my-5" style="max-width: 720px;">
-<div class="d-flex justify-content-between align-items-start mb-3">
-  <a href="/thoughts" class="text-muted small text-decoration-none">
-    ← Back to thoughts
-  </a>
-</div>
-<div class="thought-card border rounded-4 p-4 shadow-sm">
-  <!-- Header -->
-  <div class="thought-header">
-    <div class="thought-meta">
-      <span class="theme-indicator"></span>
-      <div>
-        <h4 class="thought-theme"><%= thought.theme %></h4>
-        <span class="thought-date">
-          <%= new Date(thought.createdAt).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric"
-          }) %>
-        </span>
-      </div>
-    </div>
+    <a href="/thoughts" class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
 
-    <!-- Three dots -->
-          <!-- <div class="dropdown">
-            <button
-              class="btn btn-icon dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="bi bi-three-dots"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-              <li>
-                <a class="dropdown-item" href="/thoughts/edit/<%= thought._id %>">
-                  <i class="bi bi-pencil me-2"></i>Edit
+    <div class="thought-card">
+
+        <!-- Header -->
+        <div class="thought-header">
+
+            <div>
+
+                <span class="theme-badge theme-<%= thought.theme.toLowerCase() %>">
+                    <%= thought.theme %>
+                </span>
+
+                <div class="thought-date">
+                    <i class="bi bi-clock-history"></i>
+                    <%= thought.displayDate %>
+                </div>
+
+            </div>
+
+            <div class="header-actions">
+
+                <a href="/thoughts/edit/<%= thought._id %>"
+                    class="btn-action btn-edit"    data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                    <i class="bi bi-pencil"></i>
                 </a>
-              </li>
-              <li>
+
                 <form
-                  action="/thoughts/<%= thought._id %>/delete"
-                  method="POST"
-                  onsubmit="return confirm('Delete this thought?');"
-                >
-                  <button class="dropdown-item text-danger">
-                    <i class="bi bi-trash me-2"></i>Remove
-                  </button>
+                    action="/thoughts/<%= thought._id %>/delete"
+                    method="POST"
+                    class="deleteThoughtForm">
+
+                    <button class="btn-action btn-delete"    data-bs-toggle="tooltip" data-bs-placement="top" title="Move to Trash">
+                        <i class="bi bi-trash"></i>
+                    </button>
+
                 </form>
-              </li>
-            </ul>
-          </div> -->
-  
-    <div class="d-flex mt-4">
-        <% if (user && (user.accountType === 'admin' || user.id === thought.user._id.toString())) { %>
-          <a href="/thoughts/edit/<%= thought._id %>" class="btn btn-outline-primary">
-            <i class="bi bi-pencil me-2"></i>Edit
-          </a>
-        <% } %>
-   </div>
-  
-  </div>
 
-  <!-- Content -->
-  <div class="mt-3 mb-4" style="white-space: pre-wrap;">
-    <%= thought.content %>
-  </div>
+            </div>
 
-  <!-- Footer -->
-  <div class="thought-footer">
-    <div class="meta-item">
-      <i class="bi bi-emoji-smile"></i>
-      <span><%= thought.mood %></span>
+        </div>
+
+        <hr class="thought-divider">
+
+        <!-- Reflection -->
+
+        <div class="thought-content"><p class="content"><%= (thought.content || "").trim() %></p></div>
+
+        <!-- Metadata -->
+
+        <div class="thought-meta">
+
+            <% if (thought.mood) { %>
+            <div class="meta-card">
+                <div class="meta-title">Mood</div>
+
+                <div class="meta-value">
+                    <% if (thought.mood === "motivated") { %>
+                    <i class="bi bi-emoji-heart-eyes emoji"></i>
+                    <% } %>
+
+                    <% if (thought.mood === "neutral") { %>
+                        <i class="bi bi-emoji-expressionless emoji"></i>
+                    <% } %>
+
+                    <% if (thought.mood === "confused") { %>
+                        <i class="bi bi-emoji-tear emoji"></i>
+                    <% } %>
+
+                    <% if (thought.mood === "inspired") { %>
+                        <i class="bi bi-emoji-laughing emoji"></i>
+                    <% } %>
+
+                    <% if (thought.mood === "overwhelmed") { %>
+                        <i class="bi bi-emoji-dizzy emoji"></i>
+                    <% } %>
+                    <span>
+                        <%= thought.mood.charAt(0).toUpperCase() + thought.mood.slice(1) %>
+                    </span>
+                </div>
+            </div>
+            <% } %>
+
+
+            <% if (thought.sourceType) { %>
+            <div class="meta-card">
+
+                <div class="meta-title">
+                    Source
+                </div>
+
+                <div class="meta-value">
+
+                    <% if (thought.sourceType === "Book") { %>
+                        <i class="bi bi-book-half"></i>
+                    <% } else if (thought.sourceType === "Video") { %>
+                        <i class="bi bi-play-circle-fill"></i>
+                    <% } else if (thought.sourceType === "Podcast") { %>
+                        <i class="bi bi-mic-fill"></i>
+                    <% } else if (thought.sourceType === "Article") { %>
+                        <i class="bi bi-newspaper"></i>
+                    <% } else if (thought.sourceType === "Course") { %>
+                        <i class="bi bi-mortarboard-fill"></i>
+                    <% } else if (thought.sourceType === "Movie") { %>
+                        <i class="bi bi-camera-reels-fill"></i>
+                    <% } else if (thought.sourceType === "Conversation") { %>
+                        <i class="bi bi-chat-dots-fill"></i>
+                    <% } else if (thought.sourceType === "Social Media") { %>
+                        <i class="bi bi-instagram"></i>
+                    <% } else { %>
+                        <i class="bi bi-archive-fill"></i>
+                    <% } %>
+
+                    <% if (thought.sourceLink) { %>
+
+                        <a class="source-link"
+                            href="<%= thought.sourceLink %>"
+                            target="_blank">
+
+                            <% if (thought.sourceType === "Article") { %>
+                                Article / Blog
+                            <% } else if (thought.sourceType === "Movie") { %>
+                                Movie / Documentary
+                            <% } else { %>
+                                <%= thought.sourceType %>
+                            <% } %>
+                            -
+                            <%= thought.sourceTitle %>
+
+                            <!-- <i class="bi bi-box-arrow-up-right ms-1"></i> -->
+
+                        </a>
+
+                    <% } else { %>
+
+                        <span>
+                            <% if (thought.sourceType === "Article") { %>
+                                Article / Blog
+                            <% } else if (thought.sourceType === "Movie") { %>
+                                Movie / Documentary
+                            <% } else { %>
+                                <%= thought.sourceType %>
+                            <% } %>
+                            -
+                            <%= thought.sourceTitle %>
+                        </span>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+            <% } %>
+
+
+            <% if (thought.dateWatched) { %>
+
+            <div class="meta-card">
+
+                <div class="meta-title">
+                    Watched
+                </div>
+
+                <div class="meta-value">
+
+                    <i class="bi bi-calendar-event"></i>
+
+                    <span>
+                        <%= thought.watched %>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <% } %>
+
+        </div>
+
+        <hr class="thought-divider">
+
+        <div class="reflection-footer">
+
+            <span>
+                Created <%= thought.createdDisplay %>
+            </span>
+
+            <span class="footer-separator">•</span>
+
+            <span>
+                Updated <%= thought.updatedDisplay %>
+            </span>
+
+            <span class="footer-separator">•</span>
+
+            <span>
+                <%= thought.readingTime %> min read
+            </span>
+
+        </div>
+
     </div>
-
-    <div class="meta-item">
-      <i class="bi bi-star-fill"></i>
-      <span><%= thought.impact %>/5</span>
-    </div>
-  </div>
-</div>
 
 </div>

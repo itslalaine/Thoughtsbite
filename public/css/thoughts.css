@@ -1,4 +1,9 @@
 /* list */
+/* Remove Bootstrap caret */
+.dropdown-toggle::after {
+  display: none;
+}
+
 .thought-list-wrapper {
   /* padding-top: 40px; */
   padding-bottom: 80px;
@@ -15,6 +20,7 @@
     padding: 20px;
     background: #FCFCFD;
     border-radius: 16px;
+    /* border: 2px solid #5c5c60; */
     border: #5c5c60 3px solid;
     box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     cursor: pointer;
@@ -160,11 +166,6 @@
     font-size:1rem;
 }
 
-/* Remove Bootstrap caret */
-.dropdown-toggle::after {
-  display: none;
-}
-
 
 /* Dropdown styling */
 .dropdown-menu {
@@ -190,6 +191,9 @@
 .thought-item:focus-within .dropdown-menu {
   opacity: 1;
 }
+
+/* view thought */
+
 
 /* add thought */
 .thought-card{

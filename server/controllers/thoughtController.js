@@ -1,32 +1,6 @@
 const Thought = require('../models/Thought');
 const User = require('../models/User');
-
-// ==========================================
-// FORMAT THOUGHT DATE
-// ==========================================
-
-function formatThoughtDate(date) {
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const thoughtDate = new Date(date);
-    thoughtDate.setHours(0, 0, 0, 0);
-
-    const diff = Math.floor(
-        (today - thoughtDate) / (1000 * 60 * 60 * 24)
-    );
-
-    if (diff === 0) return "Today";
-    if (diff === 1) return "Yesterday";
-    if (diff < 7) return `${diff} days ago`;
-
-    return thoughtDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-    });
-}
+const { formatThoughtDate } = require("../helpers/date");
 
 // LIST THOUGHTS (PRIVATE)
 exports.thoughtPage = async (req, res) => {
@@ -232,40 +206,71 @@ exports.postThought = async (req, res) => {
 
 };
 
-// VIEW SINGLE THOUGHT
+// VIEW SINGLE THOUGHTy
 exports.viewThought = async (req, res) => {
   try {
     const thoughtId = req.params.id;
 
-    const thought = await Thought.findOne({
+    let thought = await Thought.findOne({
       _id: thoughtId,
       isDeleted: false
-    }).populate('user', 'firstName lastName');
+    }).populate("user", "firstName lastName");
 
     if (!thought) {
-      return res.status(404).render('404');
+      return res.status(404).render("404");
     }
 
-    //Ownership check (standard users)
     if (
-      req.user.accountType !== 'admin' &&
+      req.user.accountType !== "admin" &&
       thought.user._id.toString() !== req.user.id
     ) {
-      return res.status(403).render('403', {
-        title: 'Access Denied',
-        description: 'You are not allowed to view this thought'
+      return res.status(403).render("403", {
+        title: "Access Denied",
+        description: "You are not allowed to view this thought"
       });
     }
 
-    res.render('thought/view', {
-      title: 'Thought',
-      description: 'Thought details',
+      thought = thought.toObject();
+
+      thought.displayDate = formatThoughtDate(
+        thought.dateWatched || thought.createdAt
+      );
+
+      thought.watched = new Date(thought.createdAt).toLocaleString("en-US", {
+        month:'short',
+        day:'numeric',
+        year:'numeric'
+      });
+
+      thought.createdDisplay = new Date(thought.createdAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+
+      thought.updatedDisplay = new Date(thought.updatedAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+
+    //Reading time calculation (assuming 200 words per second)
+    const words = thought.content.trim().split(/\s+/).length;
+    thought.readingTime = Math.max(1, Math.ceil(words / 200));
+
+    res.render("thought/view", {
+      title: "Thought",
+      description: "Thought details",
       thought
     });
 
   } catch (error) {
     console.error(error);
-    res.redirect('/thoughts');
+    res.redirect("/thoughts");
   }
 };
 
