@@ -1,24 +1,4 @@
 <style>
-.thought-details-wrapper{
-    width:100%;
-    max-width:720px;
-    margin:42px auto 80px;
-    padding:0 20px;
-}
-
-.back-link{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:#5c5c60;
-    text-decoration:none;
-    margin-bottom:24px;
-    font-weight:500;
-}
-
-.back-link:hover{
-    color:#1f1f1f;
-}
 
 .thought-card{
     background:#fcfcff;
@@ -26,13 +6,6 @@
     border-radius:22px;
     padding:40px;
     box-shadow:0 6px 18px rgba(0,0,0,.06);
-}
-
-.thought-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:30px;
 }
 
 .theme-badge{
@@ -107,77 +80,48 @@
 
     display:grid;
     grid-template-columns: repeat(3,1fr);
-
     gap:40px;
-
     margin:35px 0;
-
     padding-top:25px;
-
     border-top:1px solid #ECECEC;
 
 }
 
 .meta-title{
-
     font-size:.82rem;
-
     font-weight:600;
-
     color:#8d8d92;
-
     text-transform:uppercase;
-
     letter-spacing:.05em;
-
     margin-bottom:8px;
-
 }
 
 .meta-value{
-
     display:flex;
-
     align-items:center;
-
     gap:8px;
-
     color:#8d8d92;
-
     font-size:.95rem;
-
 }
 
 .meta-value i{
-
     color:#6c757d;
-
 }
 
 .meta-value a{
-
     color:#2f2f2f;
-
     text-decoration:none;
-
 }
 
 .meta-value a:hover{
-
     color:#16A085;
-
 }
 
 @media (max-width:768px){
-
     .thought-meta{
-
         grid-template-columns:1fr;
-
         gap:24px;
-
     }
-
 }
 
 .thought-divider{
@@ -192,10 +136,8 @@
     align-items: center;
     flex-wrap: wrap;
     gap: .55rem;
-
     font-size: .82rem;
     color: #9AA0A6;
-
     user-select: none;
 }
 
@@ -365,9 +307,7 @@
 
 
             <% if (thought.dateWatched) { %>
-
             <div class="meta-card">
-
                 <div class="meta-title">
                     Watched
                 </div>
@@ -381,11 +321,8 @@
                     </span>
 
                 </div>
-
             </div>
-
             <% } %>
-
         </div>
 
         <hr class="thought-divider">

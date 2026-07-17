@@ -193,7 +193,33 @@
 }
 
 /* view thought */
+.thought-details-wrapper{
+    width:100%;
+    max-width:720px;
+    margin:42px auto 80px;
+    padding:0 20px;
+}
 
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#5c5c60;
+    text-decoration:none;
+    margin-bottom:24px;
+    font-weight:500;
+}
+
+.back-link:hover{
+    color:#1f1f1f;
+}
+
+.thought-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:30px;
+}
 
 /* add thought */
 .thought-card{
