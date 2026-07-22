@@ -6,7 +6,7 @@
 .analytics-title {
     font-family: 'Quicksand', sans-serif;
     margin-top: 16px;
-    font-size: 28px;    
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
     font-weight: 700;
     color: #333;
     line-height: 1.1;
