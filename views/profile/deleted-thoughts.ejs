@@ -1,84 +1,172 @@
-<style>
-.thought-content {
-  white-space: pre-line;
-  transition: all 0.2s ease;
-}
+<div class="deleted-wrapper">
 
-/* collapsed preview */
-.thought-content.collapsed {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;   /* 👈 number of lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
+    <a href="/profile" class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Back to Profile
+    </a>
 
-<div class="container my-5" style="max-width: 720px;">
-  <h3 class="mb-4">Deleted Thoughts</h3>
+    <h1 class="deleted-title">
+        Deleted Thoughts
+    </h1>
 
-  <% if (thoughts.length === 0) { %>
-    <p class="text-muted">You have no deleted thoughts.</p>
-  <% } else { %>
+    <p class="deleted-subtitle">
+        Restore reflections you've removed.
+    </p>
 
-    <% thoughts.forEach(thought => { %>
-      <div class="card mb-3 shadow-sm">
-        <div class="card-body">
+    <% if(thoughts.length === 0){ %>
 
-          <!-- Theme -->
-          <small class="text-muted fw-semibold">
-            <%= thought.theme || 'Uncategorized' %>
-          </small>
+        <div class="empty-state">
 
-          <!-- Content -->
-          <p
-            class="mt-2 thought-content collapsed"
-            id="content-<%= thought._id %>"
-          >
-            <%= thought.content %>
-          </p>
+            <i class="bi bi-trash3"></i>
 
-          <!-- Actions -->
-          <div class="d-flex justify-content-between align-items-center mt-3">
+            <h5>Trash is empty</h5>
 
-            <button
-              class="btn btn-link p-0 text-decoration-none"
-              type="button"
-              onclick="toggleThought('<%= thought._id %>')"
-              id="toggle-<%= thought._id %>"
-            >
-              Show more
-            </button>
-
-            <form
-              action="/profile/restore/<%= thought._id %>"
-              method="POST"
-            >
-              <button class="btn btn-sm btn-outline-success">
-                Restore
-              </button>
-            </form>
-
-          </div>
+            <p>
+                Deleted thoughts will appear here.
+            </p>
 
         </div>
-      </div>
-    <% }) %>
 
-  <% } %>
+    <% } else { %>
+
+        <% thoughts.forEach(thought=>{ %>
+
+            <div class="deleted-item">
+
+                <!-- HEADER -->
+
+                <div class="deleted-header">
+
+                    <div class="theme-badge">
+
+                        <span class="theme-dot theme-<%= (thought.theme || 'other').toLowerCase() %>"></span>
+
+                        <%= thought.theme || 'Other' %>
+
+                    </div>
+
+                    <small class="deleted-date">
+
+                        <%= thought.deletedDisplay %>
+
+                    </small>
+
+                </div>
+
+                <!-- CONTENT -->
+
+                <p class="deleted-snippet">
+
+                    <%= thought.content %>
+
+                </p>
+
+                <hr class="deleted-divider">
+
+                <!-- FOOTER -->
+
+                <div class="deleted-footer">
+
+                    <div class="deleted-meta">
+
+                        <% if(thought.mood){ %>
+
+                            <div class="meta-item">
+
+                                <% if(thought.mood==="motivated"){ %>
+                                    <i class="bi bi-emoji-heart-eyes"></i>
+                                <% } %>
+
+                                <% if(thought.mood==="neutral"){ %>
+                                    <i class="bi bi-emoji-expressionless"></i>
+                                <% } %>
+
+                                <% if(thought.mood==="confused"){ %>
+                                    <i class="bi bi-emoji-tear"></i>
+                                <% } %>
+
+                                <% if(thought.mood==="inspired"){ %>
+                                    <i class="bi bi-emoji-laughing"></i>
+                                <% } %>
+
+                                <% if(thought.mood==="overwhelmed"){ %>
+                                    <i class="bi bi-emoji-dizzy"></i>
+                                <% } %>
+
+                                <span>
+
+                                    <%= thought.mood.charAt(0).toUpperCase()+thought.mood.slice(1) %>
+
+                                </span>
+
+                            </div>
+
+                        <% } %>
+
+                        <% if(thought.sourceType){ %>
+
+                            <div class="meta-item">
+
+                                <% if (thought.sourceType === "Book") { %>
+                                    <i class="bi bi-book-half"></i>
+                                <% } else if (thought.sourceType === "Video") { %>
+                                    <i class="bi bi-play-circle-fill"></i>
+                                <% } else if (thought.sourceType === "Podcast") { %>
+                                    <i class="bi bi-mic-fill"></i>
+                                <% } else if (thought.sourceType === "Article") { %>
+                                    <i class="bi bi-newspaper"></i>
+                                <% } else if (thought.sourceType === "Course") { %>
+                                    <i class="bi bi-mortarboard-fill"></i>
+                                <% } else if (thought.sourceType === "Movie") { %>
+                                    <i class="bi bi-camera-reels-fill"></i>
+                                <% } else if (thought.sourceType === "Conversation") { %>
+                                    <i class="bi bi-chat-dots-fill"></i>
+                                <% } else if (thought.sourceType === "Social Media") { %>
+                                    <i class="bi bi-instagram"></i>
+                                <% } else { %>
+                                    <i class="bi bi-archive-fill"></i>
+                                <% } %>
+
+                                <span>
+
+                                    <% if(thought.sourceType==="Article"){ %>
+
+                                        Article / Blog
+
+                                    <% }else if(thought.sourceType==="Movie"){ %>
+
+                                        Movie / Documentary
+
+                                    <% }else{ %>
+
+                                        <%= thought.sourceType %>
+
+                                    <% } %>
+
+                                </span>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+                    <form action="/profile/restore/<%= thought._id %>" method="POST">
+
+                        <button class="restore-btn">
+
+                            Restore
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
 </div>
-
-<script>
-  function toggleThought(id) {
-    const content = document.getElementById(`content-${id}`);
-    const button = document.getElementById(`toggle-${id}`);
-
-    if (content.classList.contains('collapsed')) {
-      content.classList.remove('collapsed');
-      button.textContent = 'Show less';
-    } else {
-      content.classList.add('collapsed');
-      button.textContent = 'Show more';
-    }
-  }
-</script>
-
