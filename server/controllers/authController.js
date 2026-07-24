@@ -79,6 +79,8 @@ exports.login = async (req, res) => {
   req.session.user = {
     id: user._id,
     email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
     accountType: user.accountType
   };
 
