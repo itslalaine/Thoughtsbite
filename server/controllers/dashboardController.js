@@ -1,64 +1,88 @@
-const Thought = require('../models/Thought');
-const mongoose = require('mongoose');
+const Thought = require("../models/Thought");
+const mongoose = require("mongoose");
 
 exports.dashboardPage = async (req, res) => {
   try {
 
     const userId = new mongoose.Types.ObjectId(req.session.user.id);
 
-    //RECENT THOUGHTS (limit 6 for carousel)
+    /* ---------------- Greeting ---------------- */
+
+    const hour = new Date().getHours();
+
+    let greeting = "Hello";
+
+    if (hour < 12) {
+      greeting = "Good morning";
+    } else if (hour < 18) {
+      greeting = "Good afternoon";
+    } else {
+      greeting = "Good evening";
+    }
+
+    /* ---------------- Format Date ---------------- */
+
+    const formatDateLabel = (date) => {
+
+      const today = new Date();
+      const d = new Date(date);
+
+      today.setHours(0,0,0,0);
+      d.setHours(0,0,0,0);
+
+      const diff =
+        (today.getTime() - d.getTime()) /
+        (1000 * 60 * 60 * 24);
+
+      if (diff === 0) return "Today";
+      if (diff === 1) return "Yesterday";
+      if (diff <= 7) return `${diff} days ago`;
+
+      return d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+
+    };
+
+    /* ---------------- Recent Thoughts ---------------- */
+
     const recentThoughtsRaw = await Thought.find({
       user: userId,
       isDeleted: false
     })
       .sort({ createdAt: -1 })
-      .limit(6);
+      .limit(3)
+      .lean();
 
-
-    //FORMAT DATE LABEL (Today, Yesterday, etc.)
-    const formatDateLabel = (date) => {
-      const now = new Date();
-      const d = new Date(date);
-
-      // remove time so comparison is accurate
-      now.setHours(0,0,0,0);
-      d.setHours(0,0,0,0);
-
-      const diffTime = now - d;
-      const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-      if (diffDays === 0) return "Today";
-      if (diffDays === 1) return "Yesterday";
-      if (diffDays <= 7) return `${diffDays} days ago`;
-
-      return d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      });
-    };
-
-
-    //ADD DATE LABEL TO EACH THOUGHT
     const recentThoughts = recentThoughtsRaw.map(thought => ({
-      ...thought.toObject(),
-      dateLabel: formatDateLabel(thought.createdAt)
+      ...thought,
+      displayDate: formatDateLabel(thought.createdAt)
     }));
 
+    /* ---------------- Total Thoughts ---------------- */
 
-    //THOUGHTS THIS WEEK
-    const now = new Date();
+    const totalThoughts = await Thought.countDocuments({
+      user: userId,
+      isDeleted: false
+    });
+
+    /* ---------------- Thoughts This Week ---------------- */
+
     const last7Days = new Date();
-    last7Days.setDate(now.getDate() - 7);
+    last7Days.setDate(last7Days.getDate() - 7);
 
     const thoughtsThisWeek = await Thought.countDocuments({
       user: userId,
       isDeleted: false,
-      createdAt: { $gte: last7Days }
+      createdAt: {
+        $gte: last7Days
+      }
     });
 
+    /* ---------------- Most Used Theme ---------------- */
 
-    //MOST USED THEME
     const mostUsedThemeData = await Thought.aggregate([
       {
         $match: {
@@ -69,28 +93,37 @@ exports.dashboardPage = async (req, res) => {
       {
         $group: {
           _id: "$theme",
-          count: { $sum: 1 }
+          count: {
+            $sum: 1
+          }
         }
       },
-      { $sort: { count: -1 } },
-      { $limit: 1 }
+      {
+        $sort: {
+          count: -1
+        }
+      },
+      {
+        $limit: 1
+      }
     ]);
 
     const mostUsedTheme =
       mostUsedThemeData.length > 0
         ? mostUsedThemeData[0]._id
-        : "No data";
+        : "No theme yet";
 
 
-    //STREAK (same logic as analytics)
-    const thoughts = await Thought.find({
+    /* ---------------- Overall Reflection Streak ---------------- */
+
+    const streakThoughts = await Thought.find({
       user: userId,
       isDeleted: false
     }).select("createdAt");
 
     const dateSet = new Set();
 
-    thoughts.forEach(thought => {
+    streakThoughts.forEach(thought => {
       const date = new Date(thought.createdAt);
       date.setHours(0, 0, 0, 0);
       dateSet.add(date.getTime());
@@ -100,58 +133,71 @@ exports.dashboardPage = async (req, res) => {
 
     if (dateSet.size > 0) {
 
-      const sortedDates = Array.from(dateSet).sort((a, b) => b - a);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-      streak = 1;
-      let currentDate = new Date(sortedDates[0]);
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
 
-      for (let i = 1; i < sortedDates.length; i++) {
+      let current;
 
-        const previousDate = new Date(currentDate);
-        previousDate.setDate(previousDate.getDate() - 1);
+      // Start from today if there's a reflection today.
+      if (dateSet.has(today.getTime())) {
 
-        if (sortedDates[i] === previousDate.getTime()) {
-          streak++;
-          currentDate = previousDate;
-        } else {
-          break;
-        }
+        current = new Date(today);
 
       }
+      // Otherwise allow the streak to continue from yesterday.
+      else if (dateSet.has(yesterday.getTime())) {
+
+        current = new Date(yesterday);
+
+      }
+      // Otherwise the streak is broken.
+      else {
+
+        current = null;
+
+      }
+
+      while (current && dateSet.has(current.getTime())) {
+
+        streak++;
+
+        current.setDate(current.getDate() - 1);
+
+      }
+
     }
+    /* ---------------- Render ---------------- */
 
+    res.render("dashboard/index",{
 
-    //GROUP FOR CAROUSEL (3 cards per slide)
-    const chunkArray = (array, size) => {
+      title:"Home",
+      description:"Your private dashboard",
 
-      const result = [];
+      greeting,
 
-      for (let i = 0; i < array.length; i += size) {
-        result.push(array.slice(i, i + size));
-      }
-
-      return result;
-    };
-
-
-    const thoughtChunks = chunkArray(recentThoughts, 3);
-
-
-    res.render('dashboard/index', {
-      title: 'Overview',
-      description: 'Your private dashboard',
       streak,
-      mostUsedTheme,
+
+      totalThoughts,
+
       thoughtsThisWeek,
-      thoughtChunks
+
+      mostUsedTheme,
+
+      recentThoughts
+
     });
 
   }
 
-  catch (error) {
+  catch(error){
 
-    console.error("Dashboard error:", error);
-    res.send("Dashboard error");
+    console.error(error);
+
+    res.redirect("/");
 
   }
+
 };

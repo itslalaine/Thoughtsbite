@@ -1,193 +1,411 @@
 <style>
-  /* LIMIT TEXT INSIDE CARD */
-.custom-card p {
-    font-size: 28px; /* ↓ reduced from 32px (this was the main issue) */
-    line-height: 1.4;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* LIMIT TO 4 LINES */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+.home-wrapper{
+    width:min(92%,1200px);
+    margin:clamp(2rem,5vw,4rem) auto 5rem;
 }
 
-.custom-card h5 {
-    font-size: 26px; /* from 36px */
+/* ---------------- HERO ---------------- */
+
+.hero{
+    text-align:center;
+    margin-bottom:4rem;
 }
 
-.custom-card.square {
-    font-size: 32px;
-    line-height: 1.45;
-    margin: 0;
-    font-weight: 375;
-    /* font-family: 'Quicksand', sans-serif; */
+.hero-title{
+
+    font-size:clamp(2.5rem,7vw,5.5rem);
+    font-weight:700;
+    line-height:1.05;
+    margin-bottom:1rem;
+
+}
+
+.hero-subtitle{
+    max-width:560px;
+    margin:0 auto 2rem;
+    color:#5C5C60;
+    font-size:clamp(1rem,2vw,1.35rem);
+    line-height:1.7;
+}
+
+.btn-capture{
+    display:inline-flex;
+    align-items:center;
+    gap:.65rem;
+    padding:.9rem 1.8rem;
+    background:#2CB6A3;
+    color:white;
+    border-radius:999px;
+    font-weight:600;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.btn-capture:hover{
+    background:#23A090;
+    color:white;
+}
+
+/* ---------------- STATS ---------------- */
+
+.quick-stats{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin-top:3rem;
+}
+
+.stat-pill{
+    display:flex;
+    align-items:center;
+    gap:.55rem;
+    padding:.6rem 1.3rem;
+    background:#fff;
+    border:3px solid #5c5c60;
+    border-radius:999px;
+    font-size:.92rem;
+    font-weight:600;
+}
+
+/* ---------------- SECTION ---------------- */
+
+.home-section{
+
+    margin-top:5rem;
+    text-align:center;
+
+}
+
+.home-section h2{
+    font-size:clamp(2rem,4vw,2.8rem);
+    font-weight:700;
+}
+
+.home-section p{
+    color:#5C5C60;
+    margin-bottom:3rem;
+    font-size:clamp(1rem,1.5vw,1.15rem);
+}
+
+.home-section .thought-snippet{
+    text-align: left;
+    font-size:clamp(0.9rem,1vw,1.15rem);
+}
+
+/* Reuse existing thought-item styling */
+
+.home-thoughts{
+
+    max-width:760px;
+    margin:auto;
+
+}
+
+/* ---------------- BUTTON ---------------- */
+
+.btn-view-all{
+
+    display:inline-flex;
+
+    margin-top:2.5rem;
+
+    padding:.7rem 2.5rem;
+
+    background:#35354B;
+
+    color:white;
+
+    border-radius:999px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-view-all:hover{
+
+    background:#2B2B3E;
+    color:white;
+
+}
+
+/* ---------------- EMPTY ---------------- */
+
+.empty-state{
+    padding:5rem 1rem;
+    color:#777;
+}
+
+.empty-state i{
+
+    font-size:3rem;
+    margin-bottom:1rem;
+    display:block;
+
+}
+
+.icon{
+    background: #5c5c60;;
+}
+
+.icons{
+    color:#5c5c60;
+}
+/* Theme Colors */
+
+.theme-mindset{
+    background:#B69AE8;
+}
+
+.theme-growth{
+    background:#8BCF9B;
+}
+
+.theme-productivity{
+    background:#6FC3D6;
+}
+
+.theme-discipline{
+    background:#F6B26B;
+}
+
+.theme-life{
+    background:#F5D76E;
+}
+
+.theme-other{
+    background:#C8C8C8;
 }
 
 
-  .carousel-item {
-  transition: transform 0.6s ease, opacity 0.6s ease;
-  }
-
-  .custom-card {
-    text-align: center;
-    padding: 25px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .custom-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-  }
-
-  .custom-card:hover p {
-    -webkit-line-clamp: unset;
-}
-
-.peach { background: #41afa4 !important; }
-.mint { background: #a7c7e7 !important; }
-.lavender { background: #f67f6b !important; }
-.softyellow { background: #FFF2A9 !important; }
-.powderblue { background: #C8DFF5 !important; }
-.sage { background: #B2D8B2 !important; }
-
-.btn-activity {
-    background: transparent;
-    border: none;
-    color: #4cae65;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.25s ease;
-}
-
-.btn-activity:hover {
-    color: #2e7d32;
-    text-decoration: underline;
-}
 
 </style>
-<!-- HERO -->
-<div class="container text-center mt-lg- mt-md-4 mt-3 pt-5">
-    <h1 class="phrase">A space for your <br> thoughts</h1>
-    <div class="mt-5 gap-4 d-flex justify-content-center flex-wrap">
-        <span class="custom-badge streak">
-        <i class="bi bi-lightning-fill me-1"></i>
-        <%= streak %>-day streak
-        </span>
+<div class="home-wrapper">
 
-        <span class="custom-badge mindset">
-        <i class="bi bi-lightbulb me-1"></i>
-        <%= mostUsedTheme %>
-        </span>
+    <!-- HERO -->
 
-        <span class="custom-badge thoughts">
-        <i class="bi bi-journal-text me-1"></i>
-        <%= thoughtsThisWeek %> thoughts this week
-        </span>
-    </div>
-</div>
+    <section class="hero">
 
-<!-- RECENT THOUGHTS -->
-<div class="recenthoughts text-center mt-lg-5 mt-md-4 mt-3 pt-3">
-    <h1>Recently Captured</h1>
-    <p class="sub-phrase mb-5">A quick look at your latest insights</p>
-    <div id="thoughtCarousel" class="carousel slide" data-bs-ride="carousel">
-<div id="thoughtCarousel"
-     class="carousel slide carousel-fade"
-     data-bs-ride="carousel"
-     data-bs-interval="4000"
-     data-bs-pause="hover">
+        <h1 class="hero-title">
+            <%= greeting %>, <%= user.firstName %>!
+        </h1>
 
-  <div class="carousel-inner">
-<div class="carousel-inner">
+        <p class="hero-subtitle">
+            Every reflection, no matter how small,
+            brings you closer to growth.
+        </p>
 
-  <%
-    const colors = [
-      'mint',
-      'peach',
-      'lavender',
-      'softyellow',
-      'powderblue',
-      'sage' // 6th color
-    ];
+        <a href="/thoughts/add" class="btn-capture">
 
-    let globalIndex = 0;
-  %>
+            <i class="bi bi-plus-lg"></i>
 
-  <% thoughtChunks.forEach((chunk, i) => { %>
+            Capture Today's Thought
 
-    <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+        </a>
 
-      <div class="container">
+        <div class="quick-stats">
 
-        <div class="row g-4 <%= chunk.length < 3 ? 'justify-content-center' : '' %>">
-
-          <% chunk.forEach((thought) => { 
-
-               const colorClass = colors[globalIndex % colors.length];
-               globalIndex++;
-
-          %>
-
-            <div class="col-md-4">
-
-              <div class="custom-card square <%= colorClass %>">
-
-                <h5 class="fw-bold">
-                  <%= thought.theme %>
-                </h5>
-
-                <small class="text-muted">
-                  <%= thought.dateLabel %>
-                </small>
-
-                <p class="card-text-limit">
-                  <%= thought.content %>
-                </p>
-
-              </div>
+            <div class="stat-pill">
+                <i class="bi bi-fire icons"></i>
+                <span><%= streak %> day streak</span>
 
             </div>
 
-          <% }) %>
+            <div class="stat-pill">
+                <i class="bi bi-journal-album icons"></i>
+                <span><%= thoughtsThisWeek %> thoughts this week</span>
+            </div>
+
+            <div class="stat-pill">
+                <i class="bi bi-journals icons"></i>
+                <span><%= totalThoughts %> total thoughts</span>
+            </div>
+
+            <div class="stat-pill">
+                <span class="theme-dot icon"></span>
+                <span><%= mostUsedTheme %></span>
+            </div>
 
         </div>
 
-      </div>
+    </section>
 
-    </div>
+    <!-- RECENT -->
 
-  <% }) %>
+    <section class="home-section">
 
-</div>
+        <h2>Recent Thoughts</h2>
 
-  </div>
+        <p>A quick look at your latest insights</p>
 
-  <!-- DYNAMIC DOTS -->
-  <% if (thoughtChunks.length > 1) { %>
-    <div class="carousel-indicators custom-dots">
-      <% thoughtChunks.forEach((_, i) => { %>
-        <button 
-          type="button"
-          data-bs-target="#thoughtCarousel"
-          data-bs-slide-to="<%= i %>"
-          class="<%= i === 0 ? 'active' : '' %>">
-        </button>
-      <% }) %>
-    </div>
-  <% } %>
+        <% if(recentThoughts.length === 0){ %>
 
-</div>
-</div>
+            <div class="empty-state">
 
-</div>
-<div class="text-center m-3 pt-4 pb-5">
-    <a href="/thoughts" class="btn btn-activity">
-        View more thoughts
-    </a>
+                <i class="bi bi-journal-x"></i>
+
+                <h5>No thoughts yet</h5>
+
+                <p>
+                    Capture your first reflection to begin your journey.
+                </p>
+
+            </div>
+
+        <% }else{ %>
+
+            <div class="home-thoughts">
+
+                <% recentThoughts.forEach(thought=>{ %>
+
+                    <div class="thought-item rounded-4 p-3 mb-3 shadow-sm" data-href="/thoughts/<%= thought._id %>">
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <div>
+                                <h6 class="theme-badge mb-2">
+                                    <span class="theme-dot theme-<%= thought.theme.toLowerCase() %>"></span>
+                                    <%= thought.theme %>
+                                </h6>
+                            </div>
+                            <!-- Three dots menu -->
+                            <div class="dropdown">
+                                <small class="text-muted thought-date me-2">
+                                <%= thought.displayDate %>
+                                </small>
+                                <button
+                                class="btn btn-icon dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                >
+                                <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                <li>
+                                    <a class="dropdown-item" href="/thoughts/edit/<%= thought._id %>">
+                                    <i class="bi bi-pencil me-2"></i>Edit
+                                    </a>
+                                </li>
+                                <li>
+                                <form
+                                    action="/thoughts/<%= thought._id %>/delete"
+                                    method="POST"
+                                    class="deleteThoughtForm">
+                                    <button class="dropdown-item text-danger">
+                                        <i class="bi bi-trash me-2"></i>Remove
+                                    </button>
+                                    </form>
+                                </li>
+                                </ul>
+                            </div>
+                            </div>
+
+                            <!-- Snippet -->
+                            <p class="thought-snippet mt-3 mb-4"><%= (thought.content || "").trim() %></p>
+                            <!-- Tags -->
+
+                            <hr class="thought-divider">
+
+                            <div class="thought-footer">
+
+                            <% if (thought.mood) { %>
+
+                                <div class="thought-meta">
+
+                                    <% if (thought.mood === "motivated") { %>
+                                        <i class="bi bi-emoji-heart-eyes emoji"></i>
+                                    <% } %>
+
+                                    <% if (thought.mood === "neutral") { %>
+                                        <i class="bi bi-emoji-expressionless emoji"></i>
+                                    <% } %>
+
+                                    <% if (thought.mood === "confused") { %>
+                                        <i class="bi bi-emoji-tear emoji"></i>
+                                    <% } %>
+
+                                    <% if (thought.mood === "inspired") { %>
+                                        <i class="bi bi-emoji-laughing emoji"></i>
+                                    <% } %>
+
+                                    <% if (thought.mood === "overwhelmed") { %>
+                                        <i class="bi bi-emoji-dizzy emoji"></i>
+                                    <% } %>
+
+                                    <span><%= thought.mood.charAt(0).toUpperCase() + thought.mood.slice(1) %></span>
+
+                                </div>
+
+                            <% } %>
+
+                            <% if (thought.sourceType) { %>
+
+                            <div class="thought-meta">
+
+                                <% if (thought.sourceType === "Book") { %>
+                                    <i class="bi bi-book-half"></i>
+
+                                <% } else if (thought.sourceType === "Video") { %>
+                                    <i class="bi bi-play-circle-fill"></i>
+
+                                <% } else if (thought.sourceType === "Podcast") { %>
+                                    <i class="bi bi-mic-fill"></i>
+
+                                <% } else if (thought.sourceType === "Article") { %>
+                                    <i class="bi bi-newspaper"></i>
+
+                                <% } else if (thought.sourceType === "Course") { %>
+                                    <i class="bi bi-mortarboard-fill"></i>
+
+                                <% } else if (thought.sourceType === "Movie") { %>
+                                    <i class="bi bi-camera-reels-fill"></i>
+
+                                <% } else if (thought.sourceType === "Conversation") { %>
+                                    <i class="bi bi-chat-dots-fill"></i>
+
+                                <% } else if (thought.sourceType === "Social Media") { %>
+                                    <i class="bi bi-instagram"></i>
+
+                                <% } else { %>
+                                    <i class="bi bi-archive-fill"></i>
+                                <% } %>
+
+                                <span>
+                                    <% if (thought.sourceType === "Article") { %>
+                                        Article / Blog
+                                    <% } else if (thought.sourceType === "Movie") { %>
+                                        Movie / Documentary
+                                    <% } else { %>
+                                        <%= thought.sourceType %>
+                                    <% } %>
+                                </span>
+
+                            </div>
+
+                            <% } %>
+
+                            </div>
+                        </div>
+
+                                <% }) %>
+
+            </div>
+
+            <a href="/thoughts" class="btn-view-all">
+
+                View All Thoughts
+
+            </a>
+
+        <% } %>
+
+    </section>
+
 </div>
 
 
