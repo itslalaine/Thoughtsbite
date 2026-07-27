@@ -1,106 +1,439 @@
 <style>
-body {
-  background-color: #eef3f4;
+.auth-page{
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:2rem 1rem;
+
+    background:#FCFCFD;
+
+    position:relative;
+    overflow:hidden;
+
 }
 
-/* Card style */
-.login-card {
-  border-radius: 24px;
+/* Decorative background */
+
+.auth-page::before,
+.auth-page::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:360px;
+    height:360px;
+
+    border-radius:50%;
+
+    background:#EEF9F7;
+
+    filter:blur(8px);
+
 }
 
-/* Primary brand button */
-.btn-primary {
-  background-color: #4db6ac;
-  border-color: #4db6ac;
+.auth-page::before{
+
+    top:-150px;
+    right:-150px;
+
 }
 
-.btn-primary:hover {
-  background-color: #43a89f;
-  border-color: #43a89f;
+.auth-page::after{
+
+    bottom:-150px;
+    left:-150px;
+
 }
 
-/* Input focus */
-.form-control:focus {
-  border-color: #4db6ac;
-  box-shadow: 0 0 0 0.15rem rgba(77, 182, 172, 0.25);
+.auth-card{
+
+    position:relative;
+    z-index:2;
+
+    width:min(100%,560px);
+
+    background:#fff;
+
+    border:2px solid #E9E9E9;
+
+    border-radius:28px;
+
+    padding:clamp(2rem,5vw,3rem);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.06);
+
 }
 
-/* Links */
-.auth-link {
-  color: #4db6ac;
-  font-weight: 500;
-  text-decoration: none;
+.auth-logo{
+
+    width:72px;
+    height:72px;
+
+    margin:auto;
+
+    margin-bottom:1.5rem;
+
+    border-radius:50%;
+
+    background:#E8F8F6;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
 }
 
-.auth-link:hover {
-  text-decoration: underline;
+.auth-logo i{
+
+    font-size:2rem;
+
+    color:#41AFA4;
+
+}
+
+.brand{
+
+    text-align:center;
+
+    font-size:clamp(1.8rem,4vw,2.3rem);
+
+    font-weight:700;
+
+    margin-bottom:.25rem;
+
+}
+
+/* .brand span{
+
+    color:#41AFA4;
+
+} */
+
+.auth-card h2{
+
+    text-align:center;
+
+    font-size:clamp(1.2rem,1.8vw,1.8rem);
+
+    font-weight:700;
+
+    margin-top:1rem;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#6C757D;
+
+    margin-bottom:2rem;
+
+}
+
+.auth-card label{
+
+    display:block;
+
+    font-weight:600;
+
+    margin-bottom:.55rem;
+
+}
+
+.custom-input{
+
+    border:2px solid #5C5C60;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    transition:.2s;
+
+}
+
+.custom-input:focus-within{
+
+    border-color:#41AFA4;
+
+}
+
+.custom-input .input-group-text{
+
+    background:#fff;
+
+    border:none;
+
+    color:#888;
+
+}
+
+.custom-input .form-control{
+
+    border:none;
+
+    box-shadow:none;
+
+    padding:.4rem;
+
+}
+
+.password-toggle{
+
+    border:none;
+
+    background:#fff;
+
+    color:#888;
+
+    padding:0 1rem;
+
+}
+
+.password-toggle:hover{
+
+    color:#41AFA4;
+
+}
+
+.forgot-link{
+
+    margin:.75rem 0 1.8rem;
+
+    text-align:right;
+
+}
+
+.forgot-link a{
+
+    color:#41AFA4;
+
+    text-decoration:none;
+
+    font-size:.95rem;
+
+}
+
+.forgot-link a:hover{
+
+    text-decoration:underline;
+
+}
+
+.auth-btn{
+
+    background:#41AFA4;
+
+    color:#fff;
+
+    padding:.4rem;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.auth-btn:hover{
+    color:#fff;
+    background:#37998F;
+}
+
+.divider{
+
+    display:flex;
+
+    align-items:center;
+
+    margin:2rem 0 1.5rem;
+
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#E5E7EB;
+
+}
+
+.divider span{
+
+    margin:0 1rem;
+
+    color:#999;
+
+    font-size:.9rem;
+
+}
+
+.bottom-text{
+
+    text-align:center;
+
+    color:#6C757D;
+
+    margin-bottom:0;
+
+}
+
+.bottom-text a{
+
+    color:#41AFA4;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.bottom-text a:hover{
+
+    text-decoration:underline;
+
 }
 
 </style>
 
-<div class="containerd-flex align-items-center justify-content-center">
-  <div class="row justify-content-center align-items-center">
-    <div class="col-lg-8 col-xl-7">
+<div class="auth-page">
 
-      <div class="card login-card border-0 shadow-sm rounded-4">
-        <div class="card-body p-2 p-md-2">
+    <div class="auth-card">
 
-          <!-- Header -->
-          <div class="text-center mb-4">
-            <!-- <div class="fs-2 mb-2">🍪</div> -->
-            <h2 class="fw-bold mb-1">ThoughtsBite</h2>
-            <p class="text-muted">Log in to continue</p>
-          </div>
+        <!-- Logo -->
 
-          <form action="/auth/login" method="POST">
+        <!-- <div class="auth-logo">
+
+            <i class="bi bi-journal-bookmark"></i>
+
+        </div> -->
+
+        <h1 class="brand">
+
+            ThoughtsBite
+
+        </h1>
+
+        <h2>Welcome back</h2>
+
+        <p class="subtitle">
+
+            Continue your reflection journey.
+
+        </p>
+
+        <form action="/auth/login" method="POST">
 
             <!-- Email -->
+
             <div class="mb-3">
-              <label class="form-label fw-semibold">Email</label>
-              <input
-                type="email"
-                class="form-control form-control-lg rounded-3"
-                placeholder="Enter your email address"
-                name="email"
-                required
-              >
+
+                <label>Email</label>
+
+                <div class="input-group custom-input">
+
+                    <span class="input-group-text">
+
+                        <i class="bi bi-envelope"></i>
+
+                    </span>
+
+                    <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
             </div>
 
             <!-- Password -->
+
             <div class="mb-2">
-              <label class="form-label fw-semibold">Password</label>
-              <input
-                type="password"
-                class="form-control form-control-lg rounded-3"
-                placeholder="Enter your password"
-                name="password"
-                required
-              >
+
+                <label>Password</label>
+
+                <div class="input-group custom-input">
+
+                    <span class="input-group-text">
+
+                        <i class="bi bi-lock"></i>
+
+                    </span>
+
+                    <input
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        placeholder="Enter your password"
+                        required>
+
+                    <button
+                        class="btn password-toggle"
+                        type="button"
+                        id="togglePassword">
+
+                        <i class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
             </div>
 
-            <!-- Forgot -->
-            <div class="text-start mb-4">
-              <a href="/forgot-password" class="auth-link">
-                Forgot password?
-              </a>
+            <div class="forgot-link">
+
+                <a href="/forgot-password">
+
+                    Forgot password?
+
+                </a>
+
             </div>
 
-            <!-- Submit -->
-            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-4">
-              Continue
+            <button
+                type="submit"
+                class="btn auth-btn w-100">
+
+                Sign In
+
             </button>
 
-            <!-- Footer -->
-            <p class="text-center text-muted mt-4 mb-0">
-              Don’t have an account?
-              <a href="/auth/register" class="auth-link">Sign up</a>
-            </p>
+        </form>
 
-          </form>
+        <div class="divider">
+
+            <span>or</span>
 
         </div>
-      </div>
+
+        <p class="bottom-text">
+
+            Don't have an account?
+
+            <a href="/auth/register">
+
+                Create one
+
+            </a>
+
+        </p>
 
     </div>
-  </div>
+
 </div>
