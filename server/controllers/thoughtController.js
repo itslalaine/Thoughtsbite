@@ -129,12 +129,26 @@ exports.postThought = async (req, res) => {
 
   if (sourceLink && sourceLink.trim() !== "") {
 
-    const urlRegex =
-      /^(https?:\/\/)([\w.-]+)\.([a-z]{2,})([/\w .-]*)*\/?$/i;
+      try {
 
-    if (!urlRegex.test(sourceLink)) {
-      errors.sourceLink = "Please enter a valid URL.";
-    }
+          const url = new URL(sourceLink);
+
+          if (
+              url.protocol !== "http:" &&
+              url.protocol !== "https:"
+          ) {
+
+              errors.sourceLink =
+                  "URL must start with http:// or https://";
+
+          }
+
+      } catch {
+
+          errors.sourceLink =
+              "Please enter a valid URL.";
+
+      }
 
   }
 
