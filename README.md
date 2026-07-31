@@ -29,12 +29,12 @@ A personal reflection web application where users can capture ideas, organize le
 <img src="assets/signup_page.png" width="700">
 
 ### Home Page
-<img src="assets/home_page1_page.png" width="700">
+<img src="assets/home_page1.png" width="700">
 
-<img src="assets/home_page2_page.png" width="700" style="margin-top: 24px">
+<img src="assets/home_page2.png" width="700" style="margin-top: 24px">
 
 ### Add Thought Page
-<img src="assets/addthought_page_page.png" width="700">
+<img src="assets/addthought_page.png" width="700">
 
 ### Thoughts Page
 <img src="assets/thoughts_page.png" width="700">
