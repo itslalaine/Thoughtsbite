@@ -1,43 +1,57 @@
-Thoughtsbite
-📌 About the Project
-Thoughtsbite is a simple personal web app I built to track and reflect on what I learn daily—mostly from inspirational YouTube videos and other content.
-The idea is based on collecting “small bites of thoughts” and turning them into something more meaningful over time. Instead of just consuming content, I wanted a way to store key takeaways and actually see patterns in what I’m learning.
+# ThoughtsBite
 
-🎯 What it Does
-Stores daily thoughts and key takeaways
-Tracks mood and topics over time
-Visualizes patterns and progress through analytics
-Helps turn passive learning into something more intentional
+A personal reflection web application where users can capture ideas, organize learnings, and visualize personal growth.
 
-💡 Why I Built This
-I realized that I consume a lot of content but don’t always retain or reflect on it. This project started as a personal tool to fix that.
-At the same time, I wanted to practice building a full web application—from frontend to backend—while creating something I would actually use.
+## Features
+- Authentication
+- Add/Edit/Delete Thoughts
+- Soft Delete & Restore
+- Dashboard
+- Analytics
+- Profile Management
 
-🛠️ Tech Stack
-Frontend: Bootstrap, JavaScript
-Backend: Node.js, Express.js, EJS
-Database: MongoDB
-Version Control: Git, GitHub
+## Tech Stack
+- Node.js
+- Express.js
+- MongoDB
+- EJS
+- Bootstrap
 
-📷 Preview
-(working on it)
+## Screenshots
 
-⚙️ How to Run
-Clone the repository
-Install dependencies
-npm install
+### Landing Page
+<img src="assets/landing_page.png" width="700">
 
-Run the server
-npm start
+### Login Page
+<img src="assets/login_page.png" width="700">
 
-Open in browser:
-http://localhost:3000/thoughtsbite
+### Signup Page
+<img src="assets/signup_page.png" width="700">
 
-🚀 Future Improvements
-Improve analytics visualization
-Add user authentication
-Enhance UI/UX design
-Add more detailed insights (trends, streaks, etc.)
+### Home Page
+<img src="assets/home_page1_page.png" width="700">
 
-📍 Status
-This project is still a work in progress, and I’m continuously improving it as I learn more.
+<img src="assets/home_page2_page.png" width="700" style="margin-top: 24px">
+
+### Add Thought Page
+<img src="assets/addthought_page_page.png" width="700">
+
+### Thoughts Page
+<img src="assets/thoughts_page.png" width="700">
+
+
+### Thoughts Page(View Thought)
+<img src="assets/thought_page.png" width="700">
+
+### Growth Page
+<img src="assets/growth_page.png" width="700">
+
+### Trash Page
+<img src="assets/trash_page.png" width="700">
+
+### Profile Page
+<img src="assets/profile_page.png" width="700">
+
+## Live Demo
+
+(Coming soon)
