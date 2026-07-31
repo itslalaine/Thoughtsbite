@@ -24,21 +24,21 @@ exports.register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // 1. Basic validation
+    //validation
     if (!firstName || !lastName || !email || !password) {
       return res.redirect('/auth/register');
     }
 
-    // 2. Check if email already exists
+    //Check if email already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.redirect('/auth/register');
     }
 
-    // 3. Hash password
+    //Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. Save user
+    //Save user
     await User.create({
       firstName,
       lastName,
@@ -48,7 +48,7 @@ exports.register = async (req, res) => {
       accountStatus: 'active'
     });
 
-    // 5. Redirect to login
+    //Redirect to login
     res.redirect('/auth/login');
 
   } catch (error) {
@@ -56,7 +56,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// Handle User Login
+//Handle User Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 

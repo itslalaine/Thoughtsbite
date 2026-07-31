@@ -99,33 +99,25 @@ exports.postThought = async (req, res) => {
 
   let errors = {};
 
-  // =========================
   // Reflection
-  // =========================
 
   if (!content || content.trim() === "") {
     errors.content = "Thought content is required.";
   }
 
-  // =========================
   // Source Type
-  // =========================
 
   if (!sourceType || sourceType.trim() === "") {
     errors.sourceType = "Please select a source type.";
   }
 
-  // =========================
   // Source Title
-  // =========================
 
   if (!sourceTitle || sourceTitle.trim() === "") {
     errors.sourceTitle = "Source title is required.";
   }
 
-  // =========================
   // Source Link (optional)
-  // =========================
 
   if (sourceLink && sourceLink.trim() !== "") {
 
@@ -152,33 +144,25 @@ exports.postThought = async (req, res) => {
 
   }
 
-  // =========================
   // Theme
-  // =========================
 
   if (!theme || theme.trim() === "") {
     errors.theme = "Please select a theme.";
   }
 
-  // =========================
   // Mood
-  // =========================
 
   if (!mood || mood.trim() === "") {
     errors.mood = "Please select a mood.";
   }
 
-  // =========================
   // Date
-  // =========================
 
   if (!dateWatched) {
     errors.dateWatched = "Please select a date.";
   }
 
-  // =========================
   // Validation Failed
-  // =========================
 
   if (Object.keys(errors).length > 0) {
 

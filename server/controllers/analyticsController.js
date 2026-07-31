@@ -7,9 +7,7 @@ exports.analyticsPage = async (req, res) => {
 
     const now = new Date();
 
-    // ==========================================
     // DATE RANGES
-    // ==========================================
 
     // Start of current week (Sunday)
     const startOfWeek = new Date(now);
@@ -47,9 +45,7 @@ exports.analyticsPage = async (req, res) => {
         year: 'numeric'
       });
 
-    // ==========================================
     // THOUGHTS THIS MONTH
-    // ==========================================
 
     const thoughtsThisMonth = await Thought.countDocuments({
       user: userId,
@@ -58,20 +54,6 @@ exports.analyticsPage = async (req, res) => {
         $gte: firstDayOfMonth
       }
     });
-
-    // //thoughts this week
-    // const thoughtsThisWeek = await Thought.countDocuments({
-    //   user: userId,
-    //   isDeleted: false,
-    //   createdAt: {
-    //     $gte: startOfWeek,
-    //     $lte: endOfWeek
-    //   }
-    // });
-
-    // ==========================================
-    // MOST USED THEME THIS WEEK
-    // ==========================================
 
     const topThemesData = await Thought.aggregate([
       {
@@ -96,9 +78,7 @@ exports.analyticsPage = async (req, res) => {
 
     const topThemes = topThemesData.map(item => item._id);
 
-    // ==========================================
     // TOP SOURCE THIS WEEK
-    // ==========================================
 
     const topSourceData = await Thought.aggregate([
       {
@@ -130,9 +110,7 @@ exports.analyticsPage = async (req, res) => {
         ? topSourceData[0]._id
         : 'N/A';
 
-    // ==========================================
     // MOODS THIS WEEK
-    // ==========================================
 
     const moodData = await Thought.aggregate([
       {
@@ -173,16 +151,6 @@ exports.analyticsPage = async (req, res) => {
       moodsThisWeek[a] > moodsThisWeek[b] ? a : b
     );
 
-    // const maxMoodCount = Math.max(...Object.values(moodsThisWeek), 1);
-
-    // const moodBars = {};
-
-    // Object.keys(moodsThisWeek).forEach(mood => {
-    //   moodBars[mood] = Math.round(
-    //     (moodsThisWeek[mood] / maxMoodCount) * 100
-    //   );
-    // });
-
     const totalMoodCount = Object.values(moodsThisWeek).reduce((a, b) => a + b, 0);
 
     const maxMoodCount = Math.max(...Object.values(moodsThisWeek), 1);
@@ -216,9 +184,7 @@ exports.analyticsPage = async (req, res) => {
       Overwhelmed: "#A78BFA"
   };
 
-    // ==========================================
-    // WEEKLY LINE CHART
-    // ==========================================
+  // WEEKLY LINE CHART
 
     const weeklyThoughts = await Thought.aggregate([
       {
@@ -347,9 +313,7 @@ exports.analyticsPage = async (req, res) => {
 
     }
 
-    // ==========================================
     // CURRENT STREAK
-    // ==========================================
 
     // Get all reflections created this week
     const streakThoughts = await Thought.find({
@@ -403,9 +367,7 @@ exports.analyticsPage = async (req, res) => {
       currentDate.setDate(currentDate.getDate() - 1);
     }
 
-    // ==========================================
     // STREAK MESSAGE
-    // ==========================================
 
     let streakMessage = "";
 
@@ -422,9 +384,7 @@ exports.analyticsPage = async (req, res) => {
     }
 
     const streakLabel = streak === 1 ? "day" : "days";
-    // ==========================================
     // RENDER
-    // ==========================================
 
     res.render('analytics', {
       title: 'Growth',

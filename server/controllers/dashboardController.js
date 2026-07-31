@@ -6,7 +6,7 @@ exports.dashboardPage = async (req, res) => {
 
     const userId = new mongoose.Types.ObjectId(req.session.user.id);
 
-    /* ---------------- Greeting ---------------- */
+    //greeting
 
     const hour = new Date().getHours();
 
@@ -20,7 +20,7 @@ exports.dashboardPage = async (req, res) => {
       greeting = "Good evening";
     }
 
-    /* ---------------- Format Date ---------------- */
+    //format date
 
     const formatDateLabel = (date) => {
 
@@ -46,7 +46,7 @@ exports.dashboardPage = async (req, res) => {
 
     };
 
-    /* ---------------- Recent Thoughts ---------------- */
+    //recent thoughts
 
     const recentThoughtsRaw = await Thought.find({
       user: userId,
@@ -61,14 +61,14 @@ exports.dashboardPage = async (req, res) => {
       displayDate: formatDateLabel(thought.createdAt)
     }));
 
-    /* ---------------- Total Thoughts ---------------- */
+    //total thoughts
 
     const totalThoughts = await Thought.countDocuments({
       user: userId,
       isDeleted: false
     });
 
-    /* ---------------- Thoughts This Week ---------------- */
+    //thought this week
 
     const last7Days = new Date();
     last7Days.setDate(last7Days.getDate() - 7);
@@ -81,7 +81,7 @@ exports.dashboardPage = async (req, res) => {
       }
     });
 
-    /* ---------------- Most Used Theme ---------------- */
+    //most used theme
 
     const mostUsedThemeData = await Thought.aggregate([
       {
@@ -114,7 +114,7 @@ exports.dashboardPage = async (req, res) => {
         : "No theme yet";
 
 
-    /* ---------------- Overall Reflection Streak ---------------- */
+    //overall reflection streak
 
     const streakThoughts = await Thought.find({
       user: userId,
@@ -169,7 +169,7 @@ exports.dashboardPage = async (req, res) => {
       }
 
     }
-    /* ---------------- Render ---------------- */
+    //render
 
     res.render("dashboard/index",{
 
