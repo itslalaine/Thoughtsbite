@@ -4,10 +4,12 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
+const { MongoStore } = require('connect-mongo');
 
 const connectDB = require('./server/config/db');
 
 const app = express();
+app.set('trust proxy', 1); //Render sits behind a proxy, so this setting allows Express to recognize HTTPS requests correctly. It's important for securing session cookies in production.
 const port = process.env.PORT || 3000;
 
 /* ------------------ MIDDLEWARE ------------------ */
@@ -17,10 +19,20 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  name: 'sessionId'
+  name: 'sessionId',
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: 'sessions'
+  }),
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
 }));
 
 app.use(flash());
