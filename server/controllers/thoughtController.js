@@ -66,8 +66,8 @@ exports.thoughtPage = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.redirect('/dashboard');
+    console.error('THOUGHT LIST ERROR:', error);
+    res.status(500).send(error.stack);
   }
 };
 
