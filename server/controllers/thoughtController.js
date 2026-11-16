@@ -67,8 +67,9 @@ exports.thoughtPage = async (req, res) => {
 
   } catch (error) {
     console.error('THOUGHT LIST ERROR:', error);
-    res.status(500).send(error.stack);
+    res.status(500).send('Something went wrong. Please try again later.');
   }
+  // res.send(error.stack) - for development purposes only
 };
 
 
