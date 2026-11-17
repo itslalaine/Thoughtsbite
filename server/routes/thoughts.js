@@ -20,6 +20,6 @@ router.get('/:id', thoughtController.viewThought);
 router.get('/edit/:id', thoughtController.editThoughtPage);
 router.post('/edit/:id', thoughtController.updateThought);
 
-router.post('/:id/delete', isAuthenticated, thoughtController.deleteThought);
+router.post('/:id/delete', thoughtController.deleteThought);
 
 module.exports = router;

@@ -6,7 +6,9 @@ exports.registerPage = (req, res) => {
   res.locals.showNavbar = false;
   res.render('auth/register', {
     title: 'Create Account',
-    description: 'Register a new account'
+    description: 'Register a new account',
+    errors: {},
+    oldInput: {}
   });
 };
 
@@ -20,41 +22,85 @@ exports.loginPage = (req, res) => {
 };
 
 // Handle User Registration
+
+// Handle User Registration
 exports.register = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-
   try {
-    //validation
-    if (!firstName || !lastName || !email || !password) {
-      return res.redirect('/auth/register');
+    const { firstName, lastName, email, password } = req.body;
+
+    const errors = {};
+
+    // Normalize inputs
+    const trimmedFirstName = firstName?.trim();
+    const trimmedLastName = lastName?.trim();
+    const normalizedEmail = email?.trim().toLowerCase();
+
+    // Password validation
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    // First Name
+    if (!trimmedFirstName) {
+      errors.firstName = 'First Name is required.';
     }
 
-    //Check if email already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.redirect('/auth/register');
+    // Last Name
+    if (!trimmedLastName) {
+      errors.lastName = 'Last Name is required.';
     }
 
-    //Hash password
+    // Email
+    if (!normalizedEmail) {
+      errors.email = 'Email is required.';
+    } else {
+      const existingUser = await User.findOne({
+        email: normalizedEmail
+      });
+
+      if (existingUser) {
+        errors.email = 'Email is already in use.';
+      }
+    }
+
+    // Password
+    if (!password || password.trim() === '') {
+      errors.password = 'Password is required.';
+    } else if (!strongPasswordRegex.test(password)) {
+      errors.password =
+        'Password must be at least 8 characters and include uppercase, lowercase, and a number.';
+    }
+
+    // If validation errors exist, re-render form
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).render('auth/register', {
+        title: 'Create Account',
+        errors,
+        oldInput: req.body
+      });
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //Save user
+    // Create user
     await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-      accountType: 'standard',
-      accountStatus: 'active'
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
+      email: normalizedEmail,
+      password: hashedPassword
     });
 
-    //Redirect to login
-    res.redirect('/auth/login');
+    req.flash('success', 'User created successfully');
+    return res.redirect('/auth/login');
 
   } catch (error) {
-    console.log(error);
+    console.error('REGISTRATION ERROR:', error);
+
+    req.flash('error', 'Unable to create your account. Please try again.');
+    return res.redirect('/auth/register');
   }
 };
+
 
 //Handle User Login
 exports.login = async (req, res) => {

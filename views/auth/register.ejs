@@ -93,27 +93,55 @@
     margin-bottom:.55rem;
 }
 
-.custom-input{
-    border:2px solid #5C5C60;
-    border-radius:10px;
-    overflow:hidden;
-    transition:.2s;
+
+/* Input container */
+.custom-input {
+    border: 2px solid #5C5C60;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
 }
 
-.custom-input:focus-within{
-    border-color:#41AFA4;
+/* Focus state */
+.custom-input:focus-within {
+    border-color: #41AFA4;
+    box-shadow: 0 0 0 3px rgba(65, 175, 164, .12);
 }
 
-.custom-input .input-group-text{
-    background:#fff;
-    border:none;
-    color:#888;
+/* Input icons */
+.custom-input .input-group-text {
+    background: #fff;
+    border: none;
+    color: #888;
 }
 
-.custom-input .form-control{
-    border:none;
-    box-shadow:none;
-    padding:.4rem;
+/* Text fields */
+.custom-input .form-control {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: .4rem;
+}
+
+/* Remove Bootstrap's default focus styling */
+.custom-input .form-control:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+/* Validation error state */
+.custom-input.has-error,
+.custom-input.has-error:focus-within {
+    border-color: #dc3545;
+    box-shadow: none;
+}
+
+/* Validation message */
+.field-error {
+    color: #dc3545;
+    font-size: .875rem;
+    margin-top: .35rem;
 }
 
 .register-btn{
@@ -168,11 +196,10 @@
 
             <div class="row g-3">
 
+
                 <div class="col-md-6">
-
-                    <label>First Name</label>
-
-                    <div class="input-group custom-input">
+                     <label>First Name</label>
+                    <div class="input-group custom-input <%= errors?.firstName ? 'has-error' : '' %>">
 
                         <span class="input-group-text">
                             <i class="bi bi-person"></i>
@@ -182,18 +209,21 @@
                             type="text"
                             name="firstName"
                             class="form-control"
+                            value="<%= oldInput?.firstName || '' %>"
                             placeholder="Juan"
-                            required>
-
+                        >
                     </div>
 
+                    <% if (errors?.firstName) { %>
+                        <div class="field-error">
+                            <%= errors.firstName %>
+                        </div>
+                    <% } %>
                 </div>
 
                 <div class="col-md-6">
-
                     <label>Last Name</label>
-
-                    <div class="input-group custom-input">
+                    <div class="input-group custom-input <%= errors?.lastName ? 'has-error' : '' %>">
 
                         <span class="input-group-text">
                             <i class="bi bi-person"></i>
@@ -203,11 +233,16 @@
                             type="text"
                             name="lastName"
                             class="form-control"
-                            placeholder="Dela Cruz"
-                            required>
-
+                            value="<%= oldInput?.lastName || '' %>"
+                            placeholder="Doe"
+                        >
                     </div>
 
+                    <% if (errors?.lastName) { %>
+                        <div class="field-error">
+                            <%= errors.lastName %>
+                        </div>
+                    <% } %>
                 </div>
 
             </div>
@@ -216,20 +251,26 @@
 
                 <label>Email</label>
 
-                <div class="input-group custom-input">
+                    <div class="input-group custom-input <%= errors?.email ? 'has-error' : '' %>">
 
-                    <span class="input-group-text">
-                        <i class="bi bi-envelope"></i>
-                    </span>
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope"></i>
+                        </span>
 
-                    <input
-                        type="email"
-                        name="email"
-                        class="form-control"
-                        placeholder="juan@email.com"
-                        required>
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            value="<%= oldInput?.email || '' %>"
+                            placeholder="juandoe@email.com"
+                        >
+                    </div>
 
-                </div>
+                    <% if (errors?.email) { %>
+                        <div class="field-error">
+                            <%= errors.email %>
+                        </div>
+                    <% } %>
 
             </div>
 
@@ -237,20 +278,26 @@
 
                 <label>Password</label>
 
-                <div class="input-group custom-input">
+                    <div class="input-group custom-input <%= errors?.password ? 'has-error' : '' %>">
 
-                    <span class="input-group-text">
-                        <i class="bi bi-lock"></i>
-                    </span>
+                        <span class="input-group-text">
+                            <i class="bi bi-lock"></i>
+                        </span>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        placeholder="Create a password"
-                        required>
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            value="<%= oldInput?.password || '' %>"
+                            placeholder="Create a password"
+                        >
+                    </div>
 
-                </div>
+                    <% if (errors?.password) { %>
+                        <div class="field-error">
+                            <%= errors.password %>
+                        </div>
+                    <% } %>
 
             </div>
 
