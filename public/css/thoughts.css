@@ -27,6 +27,12 @@
   /* transition: background 0.2s ease, box-shadow 0.2s ease; */
 }
 
+@media (max-width: 575.98px) {
+    .thought-item {
+        width: calc(100% - 2rem);
+    }
+}
+
 .thought-item:hover {
     background: #fafafa;
     transform: translateY(-3px);
