@@ -93,6 +93,6 @@ ThoughtsBite is deployed using Render, with MongoDB Atlas as its database provid
 
 ## Author
 
-Developed by **[Lalaine Madrona]**
+Developed by **Lalaine Madrona**
 
 [GitHub Profile](https://github.com/itslalaine)
